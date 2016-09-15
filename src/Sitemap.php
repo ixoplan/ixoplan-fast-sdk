@@ -2,9 +2,16 @@
 
 namespace Dislo\CDE\SDK;
 
-class Sitemap {
-	public function __construct($allPagesCallback = 'getAllPages') {
+use Dislo\CDE\SDK\Interfaces\PagesAPI;
 
+class Sitemap {
+	/**
+	 * @var PagesAPI
+	 */
+	private $pagesApi;
+
+	public function __construct(PagesAPI $pagesApi) {
+		$this->pagesApi = $pagesApi;
 	}
 
 	/**
