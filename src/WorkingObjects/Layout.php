@@ -3,7 +3,14 @@
 namespace Ixolit\Dislo\CDE\WorkingObjects;
 
 class Layout {
+	/**
+	 * @var string
+	 */
 	private $vhost;
+
+	/**
+	 * @var string
+	 */
 	private $name;
 
 	/**

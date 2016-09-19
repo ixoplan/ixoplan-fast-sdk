@@ -3,7 +3,14 @@
 namespace Ixolit\Dislo\CDE\WorkingObjects;
 
 class Cookie {
+	/**
+	 * @var string
+	 */
 	private $name;
+
+	/**
+	 * @var string
+	 */
 	private $value;
 
 	/**

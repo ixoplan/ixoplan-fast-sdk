@@ -7,6 +7,10 @@ use Ixolit\Dislo\CDE\Exceptions\InformationNotAvailableInContextException;
 use Ixolit\Dislo\CDE\WorkingObjects\Cookie;
 use Ixolit\Dislo\CDE\WorkingObjects\Layout;
 
+/**
+ * The request API in the CDE gives access to the current HTTP request. Some functionality may not be available
+ * depending on the current context.
+ */
 interface RequestAPI {
 	/**
 	 * Returns the resolved, normalized vhost name for the current request.

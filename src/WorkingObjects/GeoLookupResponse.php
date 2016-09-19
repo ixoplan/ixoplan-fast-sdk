@@ -5,26 +5,32 @@ namespace Ixolit\Dislo\CDE\WorkingObjects;
 use Ixolit\Dislo\CDE\Exceptions\GeoInformationNotAvailableException;
 
 class GeoLookupResponse {
+
 	/**
 	 * @var GeoCoordinates
 	 */
 	private $coordinates;
+
 	/**
 	 * @var GeoObject
 	 */
 	private $continent;
+
 	/**
 	 * @var GeoObject
 	 */
 	private $country;
+
 	/**
 	 * @var string
 	 */
 	private $timezone;
+
 	/**
 	 * @var string
 	 */
 	private $city;
+
 	/**
 	 * @var string
 	 */
@@ -52,7 +58,6 @@ class GeoLookupResponse {
 		$this->timezone    = $timezone;
 		$this->city        = $city;
 		$this->ip          = $ip;
-
 	}
 
 	/**

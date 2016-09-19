@@ -3,10 +3,12 @@
 namespace Ixolit\Dislo\CDE\WorkingObjects;
 
 class GeoCoordinates {
+
 	/**
 	 * @var float
 	 */
 	private $latitude;
+
 	/**
 	 * @var float
 	 */

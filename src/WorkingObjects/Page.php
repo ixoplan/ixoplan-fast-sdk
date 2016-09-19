@@ -3,7 +3,14 @@
 namespace Ixolit\Dislo\CDE\WorkingObjects;
 
 class Page {
+	/**
+	 * @var string
+	 */
 	private $pageUrl;
+
+	/**
+	 * @var string
+	 */
 	private $pagePath;
 
 	/**

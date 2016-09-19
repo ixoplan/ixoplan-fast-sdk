@@ -9,6 +9,9 @@ use Ixolit\Dislo\CDE\WorkingObjects\GeoCoordinates;
 use Ixolit\Dislo\CDE\WorkingObjects\GeoLookupResponse;
 use Ixolit\Dislo\CDE\WorkingObjects\GeoObject;
 
+/**
+ * This API implements the GeoIP API using the CDE API calls.
+ */
 class CDEGeoLookupAPI implements GeoLookupAPI {
 	/**
 	 * {@inheritdoc}

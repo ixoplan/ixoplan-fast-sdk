@@ -9,12 +9,15 @@ use Ixolit\Dislo\CDE\Interfaces\RequestAPI;
 use Ixolit\Dislo\CDE\WorkingObjects\Cookie;
 use Ixolit\Dislo\CDE\WorkingObjects\Layout;
 
+/**
+ * This API implements the request API using the CDE API calls.
+ */
 class CDERequestAPI implements RequestAPI  {
 	/**
 	 * {@inheritdoc}
 	 */
 	public function getVhost() {
-		if (!function_exists('getVhost')) {
+		if (!\function_exists('getVhost')) {
 			throw new CDEFeatureNotSupportedException('getVhost');
 		}
 		$vhost = getVhost();
@@ -25,7 +28,7 @@ class CDERequestAPI implements RequestAPI  {
 	}
 
 	public function getFQDN() {
-		if (!function_exists('getFQDN')) {
+		if (!\function_exists('getFQDN')) {
 			throw new CDEFeatureNotSupportedException('getFQDN');
 		}
 		$fqdn = getFQDN();

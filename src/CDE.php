@@ -2,7 +2,12 @@
 
 namespace Ixolit\Dislo\CDE;
 
+/**
+ * This class gives static access to the default API implementations.
+ */
 class CDE {
+	private function __construct() {}
+
 	/**
 	 * @return Interfaces\KVSAPI
 	 */

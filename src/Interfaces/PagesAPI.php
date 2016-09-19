@@ -2,9 +2,11 @@
 
 namespace Ixolit\Dislo\CDE\Interfaces;
 
-use Ixolit\Dislo\CDE\WorkingObjects\BreadcrumbEntry;
 use Ixolit\Dislo\CDE\WorkingObjects\Page;
 
+/**
+ * This API gives access to the pages functionality of the CDE (pages, languages, metadata, etc)
+ */
 interface PagesAPI {
 	/**
 	 * Get a list of all pages.
@@ -36,4 +38,23 @@ interface PagesAPI {
 	 * @return \Ixolit\Dislo\CDE\WorkingObjects\BreadcrumbEntry[]
 	 */
 	public function getBreadcrumb($page = null, $lang = null, $layout = null);
+
+	/**
+	 * @param string $meta
+	 * @param string|null $lang
+	 * @param string|null $pagePath
+	 * @param string|null $layout
+	 *
+	 * @return string
+	 */
+	public function getMetadata($meta, $lang = null, $pagePath = null, $layout = null);
+
+	/**
+	 * @param string|null $lang
+	 * @param string|null $pagePath
+	 * @param string|null $layout
+	 *
+	 * @return string[]
+	 */
+	public function getAllMetadata($lang = null, $pagePath = null, $layout = null);
 }

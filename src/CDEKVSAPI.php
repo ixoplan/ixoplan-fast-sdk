@@ -7,6 +7,9 @@ use Ixolit\Dislo\CDE\Exceptions\KVSKeyNotFoundException;
 use Ixolit\Dislo\CDE\WorkingObjects\KVSEntry;
 use Ixolit\Dislo\CDE\WorkingObjects\KVSKey;
 
+/**
+ * This API implements the KVS API using the CDE API calls.
+ */
 class CDEKVSAPI implements Interfaces\KVSAPI {
 	/**
 	 * {@inheritdoc}

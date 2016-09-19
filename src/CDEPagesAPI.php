@@ -3,10 +3,14 @@
 namespace Ixolit\Dislo\CDE;
 
 use Ixolit\Dislo\CDE\Exceptions\CDEFeatureNotSupportedException;
+use Ixolit\Dislo\CDE\Exceptions\MetadataNotAvailableException;
 use Ixolit\Dislo\CDE\Interfaces\PagesAPI;
 use Ixolit\Dislo\CDE\WorkingObjects\BreadcrumbEntry;
 use Ixolit\Dislo\CDE\WorkingObjects\Page;
 
+/**
+ * This API implements the pages API using the CDE API calls.
+ */
 class CDEPagesAPI implements PagesAPI {
 	/**
 	 * {@inheritdoc}
@@ -54,5 +58,33 @@ class CDEPagesAPI implements PagesAPI {
 			}
 		}
 		return $result;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getMetadata($meta, $lang = null, $pagePath = null, $layout = null) {
+		if (!\function_exists('getMeta')) {
+			throw new CDEFeatureNotSupportedException('getBreadcrumb');
+		}
+
+		$data = \getMeta($meta, $lang, $pagePath, $layout);
+
+		if ($data === null) {
+			throw new MetadataNotAvailableException($meta);
+		}
+
+		return $data;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getAllMetadata($lang = null, $pagePath = null, $layout = null) {
+		if (!\function_exists('getMeta')) {
+			throw new CDEFeatureNotSupportedException('getBreadcrumb');
+		}
+
+		return \getMeta(null, $lang, $pagePath, $layout);
 	}
 }

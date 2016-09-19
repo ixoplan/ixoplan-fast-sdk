@@ -3,14 +3,17 @@
 namespace Ixolit\Dislo\CDE\WorkingObjects;
 
 class BreadcrumbEntry {
+
 	/**
 	 * @var string
 	 */
 	private $pagePath;
+
 	/**
 	 * @var string
 	 */
 	private $url;
+
 	/**
 	 * @var string
 	 */
