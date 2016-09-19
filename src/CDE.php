@@ -2,12 +2,9 @@
 
 namespace Ixolit\Dislo\CDE;
 
-use Ixolit\Dislo\CDE\Interfaces\GeoLookupAPI;
-use Ixolit\Dislo\CDE\Interfaces\KVSAPI;
-
 class CDE {
 	/**
-	 * @return KVSAPI
+	 * @return Interfaces\KVSAPI
 	 */
 	public static function getKVSAPI() {
 		return new CDEKVSAPI();
@@ -28,7 +25,7 @@ class CDE {
 	}
 
 	/**
-	 * @return GeoLookupAPI
+	 * @return Interfaces\GeoLookupAPI
 	 */
 	public static function getGeoAPI() {
 		return new CDEGeoLookupAPI();

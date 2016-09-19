@@ -6,6 +6,11 @@ use Ixolit\Dislo\CDE\Exceptions\KVSKeyNotFoundException;
 use Ixolit\Dislo\CDE\WorkingObjects\KVSEntry;
 use Ixolit\Dislo\CDE\WorkingObjects\KVSKey;
 
+/**
+ * The KVS API gives you read-access to the CDE key-value store. Please note, the KVS cannot be directly written from
+ * the CDE API because the CDE is a geo-distributed setup. Instead, you must use the Dislo API internal mechanisms to
+ * update the KVS, which will happen asynchronously.
+ */
 interface KVSAPI {
 	const ORDERING_NONE = 'none';
 	const ORDERING_ASC = 'asc';

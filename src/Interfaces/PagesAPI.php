@@ -2,6 +2,7 @@
 
 namespace Ixolit\Dislo\CDE\Interfaces;
 
+use Ixolit\Dislo\CDE\WorkingObjects\BreadcrumbEntry;
 use Ixolit\Dislo\CDE\WorkingObjects\Page;
 
 interface PagesAPI {
@@ -23,4 +24,16 @@ interface PagesAPI {
 	 * @return string[]
 	 */
 	public function getLanguages();
+
+	/**
+	 * Returns a breadcrumb to the given page page. Defaults to the current page, language and layout. Calling this
+	 * function is only valid in the context of a page. For error pages, etc. this function returns an empty array.
+	 *
+	 * @param string|null $page
+	 * @param string|null $lang
+	 * @param string|null $layout
+	 *
+	 * @return \Ixolit\Dislo\CDE\WorkingObjects\BreadcrumbEntry[]
+	 */
+	public function getBreadcrumb($page = null, $lang = null, $layout = null);
 }

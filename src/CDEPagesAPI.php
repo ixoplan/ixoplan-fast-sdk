@@ -4,20 +4,12 @@ namespace Ixolit\Dislo\CDE;
 
 use Ixolit\Dislo\CDE\Exceptions\CDEFeatureNotSupportedException;
 use Ixolit\Dislo\CDE\Interfaces\PagesAPI;
+use Ixolit\Dislo\CDE\WorkingObjects\BreadcrumbEntry;
 use Ixolit\Dislo\CDE\WorkingObjects\Page;
 
 class CDEPagesAPI implements PagesAPI {
 	/**
-	 * Get a list of all pages.
-	 *
-	 * @param string|null $vhost
-	 * @param string|null $lang
-	 * @param string|null $layout
-	 * @param string|null $scheme
-	 *
-	 * @return Page[]
-	 *
-	 * @throws CDEFeatureNotSupportedException
+	 * {@inheritdoc}
 	 */
 	public function getAll($vhost = null, $lang = null, $layout = null, $scheme = null) {
 		if (!\function_exists('getAllPages')) {
@@ -34,11 +26,33 @@ class CDEPagesAPI implements PagesAPI {
 	}
 
 	/**
-	 * Returns a list of language codes supported on the current vhost. This is set up in vhost.ini.
-	 *
-	 * @return string[]
+	 * {@inheritdoc}
 	 */
 	public function getLanguages() {
-		return $this->getLanguages();
+		if (!\function_exists('getAllLanguages')) {
+			throw new CDEFeatureNotSupportedException('getAllLanguages');
+		}
+		return \getAllLanguages();
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getBreadcrumb($page = null, $lang = null, $layout = null) {
+		if (!\function_exists('getBreadcrumb')) {
+			throw new CDEFeatureNotSupportedException('getBreadcrumb');
+		}
+		$breadcrumb = getBreadcrumb($page, $lang, $layout);
+		$result = [];
+		if (\is_array($breadcrumb)) {
+			foreach ($breadcrumb as $entry) {
+				$result[] = new BreadcrumbEntry(
+					$entry->pageId,
+					$entry->url,
+					$entry->title
+				);
+			}
+		}
+		return $result;
 	}
 }
