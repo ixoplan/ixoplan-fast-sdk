@@ -1,6 +1,6 @@
 <?php
 
-namespace Dislo\CDE\SDK\Exceptions;
+namespace Ixolit\Dislo\CDE\Exceptions;
 
 class CDEFeatureNotSupportedException extends \Exception implements CDEException {
 	/**

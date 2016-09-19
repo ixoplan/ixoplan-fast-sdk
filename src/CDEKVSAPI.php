@@ -1,11 +1,11 @@
 <?php
 
-namespace Dislo\CDE\SDK;
+namespace Ixolit\Dislo\CDE;
 
-use Dislo\CDE\SDK\Exceptions\CDEFeatureNotSupportedException;
-use Dislo\CDE\SDK\Exceptions\KVSKeyNotFoundException;
-use Dislo\CDE\SDK\WorkingObjects\KVSEntry;
-use Dislo\CDE\SDK\WorkingObjects\KVSKey;
+use Ixolit\Dislo\CDE\Exceptions\CDEFeatureNotSupportedException;
+use Ixolit\Dislo\CDE\Exceptions\KVSKeyNotFoundException;
+use Ixolit\Dislo\CDE\WorkingObjects\KVSEntry;
+use Ixolit\Dislo\CDE\WorkingObjects\KVSKey;
 
 class CDEKVSAPI implements Interfaces\KVSAPI {
 	/**

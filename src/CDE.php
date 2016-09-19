@@ -1,8 +1,9 @@
 <?php
 
-namespace Dislo\CDE\SDK;
+namespace Ixolit\Dislo\CDE;
 
-use Dislo\CDE\SDK\Interfaces\KVSAPI;
+use Ixolit\Dislo\CDE\Interfaces\GeoLookupAPI;
+use Ixolit\Dislo\CDE\Interfaces\KVSAPI;
 
 class CDE {
 	/**
@@ -24,6 +25,13 @@ class CDE {
 	 */
 	public static function getRequestAPI() {
 		return new CDERequestAPI();
+	}
+
+	/**
+	 * @return GeoLookupAPI
+	 */
+	public static function getGeoAPI() {
+		return new CDEGeoLookupAPI();
 	}
 
 	/**

@@ -1,8 +1,8 @@
 <?php
 
-namespace Dislo\CDE\SDK\Interfaces;
+namespace Ixolit\Dislo\CDE\Interfaces;
 
-use Dislo\CDE\SDK\WorkingObjects\Page;
+use Ixolit\Dislo\CDE\WorkingObjects\Page;
 
 interface PagesAPI {
 	/**

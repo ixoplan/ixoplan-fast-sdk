@@ -1,7 +1,9 @@
 <?php
 
+
 namespace Ixolit\Dislo\CDE\Exceptions;
 
-interface CDEException {
+
+interface GeoException extends CDEException {
 
 }

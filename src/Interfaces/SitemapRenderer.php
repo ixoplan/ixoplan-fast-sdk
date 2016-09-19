@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Dislo\CDE\SDK\Interfaces;
+namespace Ixolit\Dislo\CDE\Interfaces;
 
 
 interface SitemapRenderer {

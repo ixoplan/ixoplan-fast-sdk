@@ -1,14 +1,17 @@
 <?php
 
-namespace Dislo\CDE\SDK\Interfaces;
+namespace Ixolit\Dislo\CDE\Interfaces;
 
-use Dislo\CDE\SDK\WorkingObjects\GeoLookupResponse;
+use Ixolit\Dislo\CDE\Exceptions\GeoLookupFailedException;
+use Ixolit\Dislo\CDE\WorkingObjects\GeoLookupResponse;
 
 interface GeoLookupAPI {
 	/**
 	 * @param string|null $ip
 	 *
 	 * @return GeoLookupResponse
+	 *
+	 * @throws GeoLookupFailedException
 	 */
 	public function lookup($ip = null);
 }

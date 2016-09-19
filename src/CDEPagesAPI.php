@@ -1,10 +1,10 @@
 <?php
 
-namespace Dislo\CDE\SDK;
+namespace Ixolit\Dislo\CDE;
 
-use Dislo\CDE\SDK\Exceptions\CDEFeatureNotSupportedException;
-use Dislo\CDE\SDK\Interfaces\PagesAPI;
-use Dislo\CDE\SDK\WorkingObjects\Page;
+use Ixolit\Dislo\CDE\Exceptions\CDEFeatureNotSupportedException;
+use Ixolit\Dislo\CDE\Interfaces\PagesAPI;
+use Ixolit\Dislo\CDE\WorkingObjects\Page;
 
 class CDEPagesAPI implements PagesAPI {
 	/**

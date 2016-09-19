@@ -1,10 +1,10 @@
 <?php
 
-namespace Dislo\CDE\SDK\Interfaces;
+namespace Ixolit\Dislo\CDE\Interfaces;
 
-use Dislo\CDE\SDK\Exceptions\KVSKeyNotFoundException;
-use Dislo\CDE\SDK\WorkingObjects\KVSEntry;
-use Dislo\CDE\SDK\WorkingObjects\KVSKey;
+use Ixolit\Dislo\CDE\Exceptions\KVSKeyNotFoundException;
+use Ixolit\Dislo\CDE\WorkingObjects\KVSEntry;
+use Ixolit\Dislo\CDE\WorkingObjects\KVSKey;
 
 interface KVSAPI {
 	const ORDERING_NONE = 'none';

@@ -1,9 +1,9 @@
 <?php
 
-namespace Dislo\CDE\SDK;
+namespace Ixolit\Dislo\CDE;
 
-use Dislo\CDE\SDK\Exceptions\CDEFeatureNotSupportedException;
-use Dislo\CDE\SDK\Interfaces\RequestAPI;
+use Ixolit\Dislo\CDE\Exceptions\CDEFeatureNotSupportedException;
+use Ixolit\Dislo\CDE\Interfaces\RequestAPI;
 
 class CDERequestAPI implements RequestAPI  {
 	/**

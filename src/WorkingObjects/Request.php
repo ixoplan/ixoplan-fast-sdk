@@ -1,6 +1,6 @@
 <?php
 
-namespace Dislo\CDE\SDK\WorkingObjects;
+namespace Ixolit\Dislo\CDE\WorkingObjects;
 
 class Request {
 

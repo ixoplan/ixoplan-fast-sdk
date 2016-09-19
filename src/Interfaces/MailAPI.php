@@ -1,6 +1,6 @@
 <?php
 
-namespace Dislo\CDE\SDK\Interfaces;
+namespace Ixolit\Dislo\CDE\Interfaces;
 
 interface MailAPI {
 	public function sendPlainText($from, $to, $subject, $plainText, $cc = [], $bcc = []);

@@ -1,6 +1,6 @@
 <?php
 
-namespace Dislo\CDE\SDK\Interfaces;
+namespace Ixolit\Dislo\CDE\Interfaces;
 
 interface FilesystemAPI {
 	public function exists($path);
