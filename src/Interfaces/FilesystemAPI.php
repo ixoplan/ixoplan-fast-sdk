@@ -8,6 +8,4 @@ interface FilesystemAPI {
 	public function pathInfo($path);
 
 	public function listDirectory($directory);
-
-
 }

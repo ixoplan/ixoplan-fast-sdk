@@ -2,6 +2,8 @@
 
 namespace Dislo\CDE\SDK\Interfaces;
 
+use Dislo\CDE\SDK\WorkingObjects\GeoLookupResponse;
+
 interface GeoLookupAPI {
 	/**
 	 * @param string|null $ip

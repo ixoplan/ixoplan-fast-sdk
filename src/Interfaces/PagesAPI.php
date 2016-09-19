@@ -15,5 +15,12 @@ interface PagesAPI {
 	 *
 	 * @return Page[]
 	 */
-	public function getAllPages($vhost = null, $lang = null, $layout = null, $scheme = null);
+	public function getAll($vhost = null, $lang = null, $layout = null, $scheme = null);
+
+	/**
+	 * Returns a list of language codes supported on the current vhost. This is set up in vhost.ini.
+	 *
+	 * @return string[]
+	 */
+	public function getLanguages();
 }
