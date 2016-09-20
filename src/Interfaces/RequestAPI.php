@@ -5,6 +5,7 @@ namespace Ixolit\Dislo\CDE\Interfaces;
 use Ixolit\Dislo\CDE\Exceptions\CookieNotSetException;
 use Ixolit\Dislo\CDE\Exceptions\InformationNotAvailableInContextException;
 use Ixolit\Dislo\CDE\WorkingObjects\Cookie;
+use Ixolit\Dislo\CDE\WorkingObjects\INETAddress;
 use Ixolit\Dislo\CDE\WorkingObjects\Layout;
 
 /**
@@ -85,4 +86,11 @@ interface RequestAPI {
 	 * @throws InformationNotAvailableInContextException if the page link is not available in the current context.
 	 */
 	public function getPagePath();
+
+	/**
+	 * Returns the client address that initiated the request.
+	 *
+	 * @return INETAddress
+	 */
+	public function getRemoteAddress();
 }

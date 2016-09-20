@@ -1,6 +1,7 @@
 <?php
 
 namespace Ixolit\Dislo\CDE\Interfaces;
+
 use Ixolit\Dislo\CDE\Exceptions\MailSendingFailedException;
 
 /**
@@ -20,20 +21,6 @@ interface MailAPI {
 	 * @throws MailSendingFailedException
 	 */
 	public function sendPlainText($from, $to, $subject, $plainText, $cc = [], $bcc = []);
-
-	/**
-	 * Send a HTML-only e-mail.
-	 *
-	 * @param string $from
-	 * @param string $to
-	 * @param string $subject
-	 * @param string $html
-	 * @param array $cc
-	 * @param array $bcc
-	 *
-	 * @throws MailSendingFailedException
-	 */
-	public function sendHTML($from, $to, $subject, $html, $cc = [], $bcc = []);
 
 	/**
 	 * Send a mixed-content e-mail (both HTML and plain text)

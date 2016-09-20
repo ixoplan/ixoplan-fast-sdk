@@ -7,6 +7,7 @@ use Ixolit\Dislo\CDE\Exceptions\CookieNotSetException;
 use Ixolit\Dislo\CDE\Exceptions\InformationNotAvailableInContextException;
 use Ixolit\Dislo\CDE\Interfaces\RequestAPI;
 use Ixolit\Dislo\CDE\WorkingObjects\Cookie;
+use Ixolit\Dislo\CDE\WorkingObjects\INETAddress;
 use Ixolit\Dislo\CDE\WorkingObjects\Layout;
 
 /**
@@ -133,5 +134,20 @@ class CDERequestAPI implements RequestAPI  {
 		}
 
 		return $path;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getRemoteAddress() {
+		if (!\function_exists('getRemoteAddress')) {
+			throw new CDEFeatureNotSupportedException('getRemoteAddress');
+		}
+
+		$address = getRemoteAddress();
+		if ($address === null) {
+			throw new InformationNotAvailableInContextException('remote address');
+		}
+		return INETAddress::getFromString($address);
 	}
 }

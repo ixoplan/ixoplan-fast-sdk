@@ -1,6 +1,7 @@
 <?php
 
 namespace Ixolit\Dislo\CDE;
+use Ixolit\Dislo\CDE\WorkingObjects\CDEMailAPI;
 
 /**
  * This class gives static access to the default API implementations.
@@ -34,6 +35,20 @@ class CDE {
 	 */
 	public static function getGeoAPI() {
 		return new CDEGeoLookupAPI();
+	}
+
+	/**
+	 * @return Interfaces\MailAPI
+	 */
+	public static function getMailAPI() {
+		return new CDEMailAPI();
+	}
+
+	/**
+	 * @return Interfaces\FilesystemAPI
+	 */
+	public static function getFilesystemAPI() {
+		return new CDEFilesystemAPI();
 	}
 
 	/**

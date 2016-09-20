@@ -57,4 +57,6 @@ interface PagesAPI {
 	 * @return string[]
 	 */
 	public function getAllMetadata($lang = null, $pagePath = null, $layout = null);
+
+
 }
