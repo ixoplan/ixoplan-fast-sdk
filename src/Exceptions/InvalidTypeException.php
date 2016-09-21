@@ -7,7 +7,7 @@ namespace Ixolit\Dislo\CDE\Exceptions;
  *
  * This class was ported from the Opsbears Foundation library with authorization.
  */
-class InvalidTypeException extends \InvalidArgumentException  {
+class InvalidTypeException extends \Exception implements CDEException  {
 	/**
 	 * @param mixed  $object   the object which does not match the required type
 	 * @param string $required the type required

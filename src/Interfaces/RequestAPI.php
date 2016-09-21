@@ -7,6 +7,7 @@ use Ixolit\Dislo\CDE\Exceptions\InformationNotAvailableInContextException;
 use Ixolit\Dislo\CDE\WorkingObjects\Cookie;
 use Ixolit\Dislo\CDE\WorkingObjects\INETAddress;
 use Ixolit\Dislo\CDE\WorkingObjects\Layout;
+use Ixolit\Dislo\CDE\WorkingObjects\Map;
 
 /**
  * The request API in the CDE gives access to the current HTTP request. Some functionality may not be available
@@ -93,4 +94,12 @@ interface RequestAPI {
 	 * @return INETAddress
 	 */
 	public function getRemoteAddress();
+
+	/**
+	 * Returns a dictionary containing all request parameter/value pairs if no name is given. Substitutes the $_GET
+	 * superglobal.
+	 *
+	 * @return array
+	 */
+	public function getRequestParameters();
 }

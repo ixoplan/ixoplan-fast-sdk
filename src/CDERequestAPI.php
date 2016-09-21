@@ -9,6 +9,7 @@ use Ixolit\Dislo\CDE\Interfaces\RequestAPI;
 use Ixolit\Dislo\CDE\WorkingObjects\Cookie;
 use Ixolit\Dislo\CDE\WorkingObjects\INETAddress;
 use Ixolit\Dislo\CDE\WorkingObjects\Layout;
+use Ixolit\Dislo\CDE\WorkingObjects\Map;
 
 /**
  * This API implements the request API using the CDE API calls.
@@ -149,5 +150,20 @@ class CDERequestAPI implements RequestAPI  {
 			throw new InformationNotAvailableInContextException('remote address');
 		}
 		return INETAddress::getFromString($address);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getRequestParameters() {
+		if (!\function_exists('getRequestParameterList')) {
+			throw new CDEFeatureNotSupportedException('getRequestParameterList');
+		}
+
+		$data = getRequestParameterList(null);
+		if ($data === null) {
+			throw new InformationNotAvailableInContextException('request parameter');
+		}
+		return $data;
 	}
 }

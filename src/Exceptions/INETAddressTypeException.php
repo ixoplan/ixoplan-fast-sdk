@@ -16,6 +16,6 @@ class INETAddressTypeException extends InvalidTypeException implements INETExcep
 	 * @param string      $required
 	 */
 	public function __construct(INETAddress $address, $required) {
-		parent::__construct('Address ' . get_class($address) . ' is not of required type: ' . $required);
+		parent::__construct('Address ' . \get_class($address) . ' is not of required type: ' . $required);
 	}
 }

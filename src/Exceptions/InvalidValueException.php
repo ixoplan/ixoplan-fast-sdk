@@ -7,7 +7,7 @@ namespace Ixolit\Dislo\CDE\Exceptions;
  *
  * This class was ported from the Opsbears Foundation library with authorization.
  */
-class InvalidValueException extends \InvalidArgumentException  {
+class InvalidValueException extends \Exception implements CDEException {
 	private static function isStringConvertible($string) {
 		if (\is_int($string) || \is_bool($string) || \is_float($string) || \is_string($string)) {
 			return true;

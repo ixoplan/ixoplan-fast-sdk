@@ -57,7 +57,6 @@ class SitemapRenderer implements Interfaces\SitemapRenderer {
 	/**
 	 * Renders an XML sitemap fragment.
 	 *
-	 * @param string $path
 	 * @param Page[] $pages
 	 *
 	 * @return string
