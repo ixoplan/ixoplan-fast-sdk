@@ -8,6 +8,9 @@ use Ixolit\Dislo\CDE\WorkingObjects\INET4Address;
 use Ixolit\Dislo\CDE\WorkingObjects\INET6Address;
 use Ixolit\Dislo\CDE\WorkingObjects\INETRange;
 
+/**
+ * This class was ported from the Opsbears Foundation library with authorization.
+ */
 class INETRangeTest extends CDEUnitTest {
 	/**
 	 * Tests, that range assignments don't result in exceptions.

@@ -8,6 +8,9 @@ use Ixolit\Dislo\CDE\Exceptions\INETInvalidMaskException;
 use Ixolit\Dislo\CDE\WorkingObjects\INET4Address;
 use Ixolit\Dislo\CDE\WorkingObjects\INET6Address;
 
+/**
+ * This class was ported from the Opsbears Foundation library with authorization.
+ */
 class INET4AddressTest extends \Ixolit\Dislo\CDE\UnitTest\CDEUnitTest {
 	/**
 	 * This function tests basic functionality with valid IPv4 addresses.

@@ -19,7 +19,8 @@ class CDEFilesystemAPI implements FilesystemAPI {
 		if (!\function_exists('getPathInfo')) {
 			throw new CDEFeatureNotSupportedException('getPathInfo');
 		}
-		return (\getPathInfo($path) === null);
+		$path = preg_replace('/^vfs\:/', '/', $path);
+		return (\getPathInfo($path) !== null);
 	}
 
 	/**
@@ -30,7 +31,7 @@ class CDEFilesystemAPI implements FilesystemAPI {
 	 * @throws UnexpectedFilesystemEntryException
 	 */
 	private function entryToObject($name, $entry) {
-		$name = str_replace('vfs:', '/', $name);
+		$name = preg_replace('/^vfs\:/', '/', $name);
 		switch ($entry->type) {
 			case 'file':
 				$modified = new \DateTime();
@@ -53,6 +54,7 @@ class CDEFilesystemAPI implements FilesystemAPI {
 		if (!\function_exists('getPathInfo')) {
 			throw new CDEFeatureNotSupportedException('getPathInfo');
 		}
+		$path = preg_replace('/^vfs\:/', '/', $path);
 		$entry = getPathInfo($path);
 		if ($entry === null) {
 			throw new FileNotFoundException($path);
@@ -70,6 +72,7 @@ class CDEFilesystemAPI implements FilesystemAPI {
 		if (!\function_exists('listDirectory')) {
 			throw new CDEFeatureNotSupportedException('listDirectory');
 		}
+		$directory = preg_replace('/^vfs\:/', '/', $directory);
 		if ($this->pathInfo($directory)->getType() == FilesystemEntry::TYPE_FILE) {
 			throw new DirectoryExpectedException($directory);
 		}

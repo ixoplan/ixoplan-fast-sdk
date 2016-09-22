@@ -8,6 +8,9 @@ use Ixolit\Dislo\CDE\Exceptions\INETInvalidMaskException;
 use Ixolit\Dislo\CDE\WorkingObjects\INET4Address;
 use Ixolit\Dislo\CDE\WorkingObjects\INET6Address;
 
+/**
+ * This class was ported from the Opsbears Foundation library with authorization.
+ */
 class INET6AddressTest extends UnitTest\CDEUnitTest {
 	/**
 	 * This function tests basic functionality with valid IPv6 addresses.
@@ -35,11 +38,15 @@ class INET6AddressTest extends UnitTest\CDEUnitTest {
 	 */
 	public function testGetAsBinary() {
 		$o = new INET6Address('2001:950:0:16:0:0:0:2');
-		$this->assertEquals('0010000000000001000010010101000000000000000000000000000000010110000000000000000000000000' .
-			'0000000000000000000000000000000000000010', $o->getAsBinary(),
+		$this->assertEquals(
+			'0010000000000001000010010101000000000000000000000000000000010110000000000000000000000000' .
+			'0000000000000000000000000000000000000010',
+			$o->getAsBinary(),
 			'INET6Address does not return the valid binary representation.');
-		$this->assertEquals('0010000000000001000010010101000000000000000000000000000000010110000000000000000000000000' .
-			'0000000000000000000000000000000000000000', $o->getAsBinary(64),
+		$this->assertEquals(
+			'0010000000000001000010010101000000000000000000000000000000010110000000000000000000000000' .
+			'0000000000000000000000000000000000000000',
+			$o->getAsBinary(64),
 			'INET6Address does not mask properly.');
 	}
 
@@ -191,6 +198,7 @@ class INET6AddressTest extends UnitTest\CDEUnitTest {
 	/**
 	 * This function tests for the following globally routable / unroutable prefixes:
 	 * These prefixes are NOT routable:
+	 *
 	 * <ul>
 	 *	<li>::1/128 &ndash; localhost</li>
 	 *	<li>fe80::/10 &ndash; Link-local autoconf addresses</li>
