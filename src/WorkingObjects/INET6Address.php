@@ -88,7 +88,9 @@ class INET6Address extends INETAddress {
 	 */
 	public function __construct($address = '::') {
 		parent::__construct($address);
-	}	/**
+	}
+
+	/**
 	 * Get global unicast addresses
 	 * @return INETRange
 	 */
@@ -108,7 +110,7 @@ class INET6Address extends INETAddress {
 	 * @return INET6Address
 	 */
 	public function setAddress($address) {
-		$colons = substr_count($address, ':');
+		$colons = preg_match_all('/:/', $address);
 		if ($address == '::') {
 			$newaddress = '0:0:0:0:0:0:0:0';
 		} else {
@@ -132,7 +134,7 @@ class INET6Address extends INETAddress {
 		if (!preg_match('/^(?P<part1>[a-fA-F0-9]{1,4}):(?P<part2>[a-fA-F0-9]{1,4}):'
 			. '(?P<part3>[a-fA-F0-9]{1,4}):(?P<part4>[a-fA-F0-9]{1,4}):'
 			. '(?P<part5>[a-fA-F0-9]{1,4}):(?P<part6>[a-fA-F0-9]{1,4}):'
-			. '(?P<part7>[a-fA-F0-9]{1,4}):(?P<part8>[a-fA-F0-9]{1,4})$/',
+			. '(?P<part7>[a-fA-F0-9]{1,4}):(?P<part8>[a-fA-F0-9]{1,4})$/D',
 			$newaddress, $matches)
 		) {
 			throw new INETAddressFormatException($address);

@@ -21,8 +21,8 @@ abstract class FilesystemEntry {
 	 * @param string $type
 	 */
 	public function __construct($name, $type) {
-		$this->type = $type;
-		$this->name = $name;
+		$this->type      = $type;
+		$this->name      = $name;
 	}
 
 	/**
@@ -37,5 +37,9 @@ abstract class FilesystemEntry {
 	 */
 	public function getType() {
 		return $this->type;
+	}
+
+	public function __toString() {
+		return $this->name;
 	}
 }

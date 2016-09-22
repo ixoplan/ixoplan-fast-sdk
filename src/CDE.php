@@ -31,6 +31,13 @@ class CDE {
 	}
 
 	/**
+	 * @return Interfaces\ResponseAPI
+	 */
+	public static function getResponseAPI() {
+		return new CDEResponseAPI();
+	}
+
+	/**
 	 * @return Interfaces\GeoLookupAPI
 	 */
 	public static function getGeoAPI() {

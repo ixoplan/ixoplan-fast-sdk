@@ -30,6 +30,7 @@ class CDEFilesystemAPI implements FilesystemAPI {
 	 * @throws UnexpectedFilesystemEntryException
 	 */
 	private function entryToObject($name, $entry) {
+		$name = str_replace('vfs:', '/', $name);
 		switch ($entry->type) {
 			case 'file':
 				$modified = new \DateTime();
@@ -74,7 +75,7 @@ class CDEFilesystemAPI implements FilesystemAPI {
 		}
 		$result = [];
 		foreach (listDirectory($directory) as $name => $entry) {
-			$result[] = $this->entryToObject($name, $entry);
+			$result[] = $this->entryToObject(\rtrim($directory, '/') . '/' . $name, $entry);
 		}
 		return $result;
 	}
