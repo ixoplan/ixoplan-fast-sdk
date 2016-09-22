@@ -34,7 +34,7 @@ class CDEResponseAPI implements ResponseAPI {
 		if (!\function_exists('setContentType')) {
 			throw new CDEFeatureNotSupportedException('setContentType');
 		}
-		$this->setContentType($contentType);
+		\setContentType($contentType);
 	}
 
 	/**
@@ -44,7 +44,7 @@ class CDEResponseAPI implements ResponseAPI {
 		if (!\function_exists('setStatusCode')) {
 			throw new CDEFeatureNotSupportedException('setStatusCode');
 		}
-		if (!setStatusCode($statusCode)) {
+		if (!\setStatusCode($statusCode)) {
 			throw new InvalidStatusCodeException($statusCode);
 		}
 	}
