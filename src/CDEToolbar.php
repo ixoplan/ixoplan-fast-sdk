@@ -73,18 +73,20 @@ class CDEToolbar {
 	}
 
 	public function renderToolbar() {
-		$previewVersion = new \DateTime();
-		$previewVersion->setTimestamp($this->previewInfo->timestamp/1000);
+		if ($this->previewInfo) {
+			$previewVersion = new \DateTime();
+			$previewVersion->setTimestamp($this->previewInfo->timestamp / 1000);
 
-		if (isset($this->previewInfo->leave_preview_url)) {
-			$previewUrl = $this->previewInfo->leave_preview_url;
-		} else {
-			$previewUrl = '';
+			if (isset($this->previewInfo->leave_preview_url)) {
+				$previewUrl = $this->previewInfo->leave_preview_url;
+			} else {
+				$previewUrl = '';
+			}
+
+			$testRunner = new CDETestRunner($this->filesystemAPI, $this->unitTestDirectories);
+			$unitTests  = $testRunner->getUnitTests();
+
+			require(preg_replace('/^vfs\:/', '/', __DIR__ . '/../templates/toolbar/toolbar.php'));
 		}
-
-		$testRunner = new CDETestRunner($this->filesystemAPI, $this->unitTestDirectories);
-		$unitTests = $testRunner->getUnitTests();
-
-		require(preg_replace('/^vfs\:/', '/', __DIR__ . '/../templates/toolbar/toolbar.php'));
 	}
 }

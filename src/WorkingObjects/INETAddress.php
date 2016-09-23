@@ -81,7 +81,9 @@ abstract class INETAddress {
 	 *
 	 * @param INETRange[] $ranges if INETRange $ranges
 	 *
-	 * @return boolean
+	 * @return bool
+	 *
+	 * @throws InvalidTypeException
 	 */
 	public function isInRanges($ranges) {
 		$contained = false;
@@ -91,6 +93,8 @@ abstract class INETAddress {
 					$contained = true;
 					break;
 				}
+			} else if (\is_string($range) || (\is_object($range) && \method_exists($range, '__toString'))) {
+
 			} else {
 				throw new InvalidTypeException($range, 'INETRange');
 			}
