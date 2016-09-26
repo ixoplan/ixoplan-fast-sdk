@@ -94,8 +94,11 @@
 		border-top:1px solid #ccc !important;
 		position:relative !important;
 	}
-	.cdeToolbar .cdeUnitTestList .cdeUnitTestClass:last-child {
-		border-bottom:0 !important;
+	.cdeToolbar .cdeUnitTestList .cdeUnitTestClass:first-child {
+		border-top:0 !important;
+	}
+	.cdeToolbar .cdeUnitTestList .cdeRunUnitTestsButton {
+		border-top:1px solid #ccc !important;
 	}
 	.cdeToolbar .cdeUnitTestList .cdeUnitTestClass label.cdeUnitTestClassSelector,
 	.cdeToolbar .cdeUnitTestList .cdeRunUnitTestsButton {
@@ -208,9 +211,6 @@
 			Unit tests ▲
 		</a>
 		<div class="cdeUnitTestList cdePopup" id="cdeUnitTestList">
-			<div class="cdeRunUnitTestsButton" id="cdeRunUnitTestsButton">
-				Run selected tests...
-			</div>
 			<?php foreach ($unitTests as $testClass => $testMethods) :?>
 				<div class="cdeUnitTestClass" id="cdeUnitTestClass_<?=html(str_replace('\\','',$testClass))?>">
 					<label for="cdeUnitTestClassSelector_<?=html(str_replace('\\','',$testClass))?>"
@@ -230,6 +230,9 @@
 					</label>
 				</div>
 			<?php endforeach; ?>
+			<div class="cdeRunUnitTestsButton" id="cdeRunUnitTestsButton">
+				Run selected tests...
+			</div>
 		</div>
 	</div>
 </div>
