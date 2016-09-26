@@ -3,6 +3,9 @@
 	"license": "Dislo License",
 	"type": "library",
 	"description": "CDE SDK to be used within the CDE.",
+	"require": {
+		"ixolit/dislo-cde-unittest": "dev-master"
+	},
 	"autoload": {
 		"psr-4": {
 			"Ixolit\\Dislo\\CDE\\": "./src"
