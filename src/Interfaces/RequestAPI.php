@@ -8,6 +8,7 @@ use Ixolit\Dislo\CDE\WorkingObjects\Cookie;
 use Ixolit\Dislo\CDE\WorkingObjects\INETAddress;
 use Ixolit\Dislo\CDE\WorkingObjects\Layout;
 use Ixolit\Dislo\CDE\WorkingObjects\Map;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * The request API in the CDE gives access to the current HTTP request. Some functionality may not be available
@@ -15,6 +16,13 @@ use Ixolit\Dislo\CDE\WorkingObjects\Map;
  */
 interface RequestAPI {
 	/**
+	 * Returns the scheme for the current request, e.g. http or https
+	 *
+	 * @return string
+	 */
+	public function getScheme();
+
+		/**
 	 * Returns the resolved, normalized vhost name for the current request.
 	 *
 	 * @return string
@@ -102,4 +110,11 @@ interface RequestAPI {
 	 * @return array
 	 */
 	public function getRequestParameters();
+
+	/**
+	 * Returns a PSR-7 ServerRequestInterface object
+	 *
+	 * @return ServerRequestInterface
+	 */
+	public function getPSR7();
 }

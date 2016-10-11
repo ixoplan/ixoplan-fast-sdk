@@ -4,7 +4,8 @@
 	"type": "library",
 	"description": "CDE SDK to be used within the CDE.",
 	"require": {
-		"ixolit/dislo-cde-unittest": "dev-master"
+		"ixolit/dislo-cde-unittest": "dev-master",
+		"psr/http-message": "^1.0"
 	},
 	"autoload": {
 		"psr-4": {

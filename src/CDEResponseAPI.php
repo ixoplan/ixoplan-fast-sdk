@@ -5,6 +5,7 @@ namespace Ixolit\Dislo\CDE;
 use Ixolit\Dislo\CDE\Exceptions\CDEFeatureNotSupportedException;
 use Ixolit\Dislo\CDE\Exceptions\InvalidStatusCodeException;
 use Ixolit\Dislo\CDE\Interfaces\ResponseAPI;
+use Psr\Http\Message\ResponseInterface;
 
 class CDEResponseAPI implements ResponseAPI {
 	/**
@@ -47,5 +48,29 @@ class CDEResponseAPI implements ResponseAPI {
 		if (!\setStatusCode($statusCode)) {
 			throw new InvalidStatusCodeException($statusCode);
 		}
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function sendPSR7(ResponseInterface $response) {
+		$this->setStatusCode($response->getStatusCode());
+		$headers = $response->getHeaders();
+
+		foreach ($headers as $header => $content) {
+			switch ($header) {
+				case 'content-type':
+					$this->setContentType(\implode(';', $content));
+					break;
+				case 'location':
+					$this->redirectTo(\implode(';',$content), ($response->getStatusCode()==301?true:false));
+					break;
+				default:
+					throw new CDEFeatureNotSupportedException('Sending header type ' . $header . ' is not supported');
+					break;
+			}
+		}
+
+		echo $response->getBody();
 	}
 }

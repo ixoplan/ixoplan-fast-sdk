@@ -3,8 +3,16 @@
 namespace Ixolit\Dislo\CDE\Interfaces;
 
 use Ixolit\Dislo\CDE\Exceptions\InvalidStatusCodeException;
+use Psr\Http\Message\ResponseInterface;
 
 interface ResponseAPI {
+	/**
+	 * Sends out a PSR-7 response.
+	 *
+	 * @param ResponseInterface $response
+	 */
+	public function sendPSR7(ResponseInterface $response);
+
 	/**
 	 * Performs a permanent or temporary redirect to the location specified via $location. Performs a permanent or
 	 * temporary redirect to the location specified via $location.

@@ -10,11 +10,22 @@ use Ixolit\Dislo\CDE\WorkingObjects\Cookie;
 use Ixolit\Dislo\CDE\WorkingObjects\INETAddress;
 use Ixolit\Dislo\CDE\WorkingObjects\Layout;
 use Ixolit\Dislo\CDE\WorkingObjects\Map;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * This API implements the request API using the CDE API calls.
  */
 class CDERequestAPI implements RequestAPI  {
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getScheme() {
+		if (!\function_exists('getScheme')) {
+			throw new CDEFeatureNotSupportedException('getScheme');
+		}
+		return getScheme();
+	}
+
 	/**
 	 * {@inheritdoc}
 	 */
@@ -47,7 +58,7 @@ class CDERequestAPI implements RequestAPI  {
 		if (!\function_exists('getCookie')) {
 			throw new CDEFeatureNotSupportedException('getCookie');
 		}
-		$value = $this->getCookie($name);
+		$value = getCookie($name);
 		if ($value === null) {
 			throw new CookieNotSetException($name);
 		}
@@ -165,5 +176,32 @@ class CDERequestAPI implements RequestAPI  {
 			throw new InformationNotAvailableInContextException('request parameter');
 		}
 		return $data;
+	}
+
+	/**
+	 * Returns a PSR-7 ServerRequestInterface object
+	 *
+	 * @return ServerRequestInterface
+	 */
+	public function getPSR7() {
+		//todo add method
+		$request = new ServerRequest(
+			'GET',
+			new Uri(
+				$this->getScheme(),
+				$this->getFQDN(),
+				($this->getScheme()=='https'?443:80),
+				$this->getPageLink(),
+				\http_build_query($this->getRequestParameters())
+			)
+		);
+
+		$cookies = [];
+		foreach ($this->getCookies() as $cookie) {
+			$cookies[$cookie->getName()] = $cookie->getValue();
+		}
+		$request = $request->withCookieParams($cookies);
+
+		return $request;
 	}
 }
