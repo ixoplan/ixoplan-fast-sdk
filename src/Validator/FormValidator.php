@@ -2,6 +2,9 @@
 
 namespace Ixolit\Dislo\CDE\Validator;
 
+/**
+ * This class was ported from the Piccolo form library with permission.
+ */
 interface FormValidator {
 	/**
 	 * Return a unique key for the error type.

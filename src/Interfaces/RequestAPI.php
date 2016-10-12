@@ -22,7 +22,7 @@ interface RequestAPI {
 	 */
 	public function getScheme();
 
-		/**
+	/**
 	 * Returns the resolved, normalized vhost name for the current request.
 	 *
 	 * @return string

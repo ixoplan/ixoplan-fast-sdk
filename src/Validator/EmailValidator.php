@@ -5,6 +5,8 @@ namespace Ixolit\Dislo\CDE\Validator;
 /**
  * Validates an e-mail address using both a formal method, as well as looking up the MX, A or AAAA record for the
  * domain.
+ *
+ * This class was ported from the Piccolo form library with permission.
  */
 class EmailValidator implements FormValidator {
 	const ERROR_INVALID_EMAIL = 'invalid-email';

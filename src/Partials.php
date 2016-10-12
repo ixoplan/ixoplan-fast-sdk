@@ -23,6 +23,8 @@ class Partials {
 		}
 		$tryFiles[] = '/vhosts/' . getVhost() . '/partials/' . $name . '.php';
 
+		\extract($data);
+
 		foreach ($tryFiles as $tryFile) {
 			if (\file_exists($tryFile)) {
 				include($tryFile);

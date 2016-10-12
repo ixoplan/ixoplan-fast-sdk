@@ -466,7 +466,6 @@ function kvsFindKeys($expr, $limit = null, $offset = null, $ordering = null) {
  * @return object
  */
 function kvsGet($key) {
-
 }
 
 /**

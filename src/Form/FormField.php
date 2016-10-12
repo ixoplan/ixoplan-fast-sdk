@@ -6,6 +6,9 @@ use Psr\Http\Message\ServerRequestInterface;
 use Ixolit\Dislo\CDE\Validator\FormValidator;
 use Ixolit\Dislo\CDE\Validator\RequiredValidator;
 
+/**
+ * This class was ported from the Piccolo form library with permission.
+ */
 abstract class FormField {
 	/**
 	 * @var string

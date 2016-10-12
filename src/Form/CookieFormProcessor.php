@@ -6,6 +6,9 @@ use Ixolit\Dislo\CDE\Interfaces\FormProcessorInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
+/**
+ * This class was ported from the Piccolo form library with permission.
+ */
 class CookieFormProcessor implements FormProcessorInterface {
 	/**
 	 * {@inheritdoc}

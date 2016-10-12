@@ -4,7 +4,10 @@ namespace Ixolit\Dislo\CDE\Form;
 
 use Ixolit\Dislo\CDE\Validator\SingleLineValidator;
 
-class EmailField extends FormField {
+/**
+ * This class was ported from the Piccolo form library with permission.
+ */
+class EmailField extends TextField {
 	public function __construct($name) {
 		parent::__construct($name);
 
