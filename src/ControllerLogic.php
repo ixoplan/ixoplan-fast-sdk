@@ -6,6 +6,8 @@ use Ixolit\Dislo\CDE\Exceptions\ControllerSkipViewException;
 use Ixolit\Dislo\CDE\Interfaces\FilesystemAPI;
 use Ixolit\Dislo\CDE\Interfaces\RequestAPI;
 use Ixolit\Dislo\CDE\Interfaces\ResponseAPI;
+use Ixolit\Dislo\CDE\WorkingObjects\ViewModel;
+use Psr\Http\Message\ResponseInterface;
 
 class ControllerLogic {
 	/**
@@ -30,24 +32,40 @@ class ControllerLogic {
 	}
 
 	public function execute() {
+		global $view;
+
+
 		$path = '/vhosts/';
 		$path .= urlencode($this->requestApi->getVhost());
 		$path .= '/layouts/';
-		$path .= \urlencode($this->requestApi->getLayout());
-		$path .= '/pages/';
-		$path .= $this->requestApi->getPagePath();
+		$path .= $this->requestApi->getLayout()->getName();
+		$path .= '/pages';
+		$path .= rtrim($this->requestApi->getPagePath(), '/');
 		$path .= '/controller.php';
 
-		var_dump($path);
-		exit;
-
+		$viewData = [];
 		if ($this->fsApi->exists($path)) {
 			try {
 				$controllerData = include($path);
 			} catch (ControllerSkipViewException $e) {
 				exit;
+			} catch (\Exception $e) {
+				if (\function_exists('previewInfo') && previewInfo()) {
+					var_dump($e);
+					exit;
+				} else {
+					//todo add proper error page
+					throw $e;
+				}
 			}
-			$GLOBALS = $controllerData;
+			if ($controllerData instanceof ResponseInterface) {
+				$this->responseApi->sendPSR7($controllerData);
+				exit;
+			}
+			foreach ($controllerData as $key => $value) {
+				$viewData[$key] = $value;
+			}
 		}
+		$view = new ViewModel($viewData);
 	}
 }

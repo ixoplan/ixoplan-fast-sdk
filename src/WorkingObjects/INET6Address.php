@@ -110,7 +110,7 @@ class INET6Address extends INETAddress {
 	 * @return INET6Address
 	 */
 	public function setAddress($address) {
-		$colons = preg_match_all('/:/', $address);
+		$colons = preg_match_all('/:/', $address, $matches);
 		if ($address == '::') {
 			$newaddress = '0:0:0:0:0:0:0:0';
 		} else {

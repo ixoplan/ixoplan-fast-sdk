@@ -50,6 +50,22 @@ abstract class FormField {
 	 */
 	private $value = '';
 
+	protected $masked = false;
+
+	/**
+	 * @param boolean $masked
+	 */
+	public function setMasked($masked) {
+		$this->masked = $masked;
+	}
+
+	/**
+	 * @return boolean
+	 */
+	public function isMasked() {
+		return $this->masked;
+	}
+
 	/**
 	 * Return the HTML form element type.
 	 *
@@ -129,9 +145,8 @@ abstract class FormField {
 		}
 		if (!\is_null($value)) {
 			$this->setValue($value);
-		} else {
-			$this->validate();
 		}
+		$this->validate();
 
 		return $this->errors;
 	}
@@ -216,7 +231,13 @@ abstract class FormField {
 	 */
 	public function setValue($value) {
 		$this->value = $value;
-		$this->validate();
+	}
+
+	/**
+	 * @param array $errors
+	 */
+	public function setErrors($errors) {
+		$this->errors = $errors;
 	}
 
 	/**

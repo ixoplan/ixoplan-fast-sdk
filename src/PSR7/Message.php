@@ -1,6 +1,6 @@
 <?php
 
-namespace Ixolit\Dislo\CDE;
+namespace Ixolit\Dislo\CDE\PSR7;
 
 use Psr\Http\Message\StreamInterface;
 
@@ -25,7 +25,7 @@ abstract class Message {
 		$body = null,
 		$version = '1.1'
 	) {
-		$this->headers = $headers;
+		$this->headers  = $headers;
 		$this->protocol = $version;
 		if ($body !== '' && $body !== null) {
 			$this->stream = new StringStream($body);
@@ -39,15 +39,6 @@ abstract class Message {
 	 */
 	public function getProtocolVersion() {
 		return $this->protocol;
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function withProtocolVersion($version) {
-		$newObject = clone $this;
-		$newObject->protocol = $version;
-		return $newObject;
 	}
 
 	/**
@@ -89,58 +80,7 @@ abstract class Message {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function withHeader($name, $value) {
-		$newObject = clone $this;
-		if (\is_array($value)) {
-			$newObject->headers[$name] = $value;
-		} else {
-			$newObject->headers[$name] = [$value];
-		}
-		return $newObject;
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function withAddedHeader($name, $value) {
-		$newObject = clone $this;
-		if (!isset($newObject->headers[$name])) {
-			$newObject->headers[$name] = [];
-		}
-		if (\is_array($value)) {
-			foreach ($value as $v) {
-				$newObject->headers[$name][] = $v;
-			}
-		} else {
-			$newObject->headers[$name][] = $value;
-		}
-		return $newObject;
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function withoutHeader($name) {
-		$newObject = clone $this;
-		if (isset($newObject->headers[$name])) {
-			unset($newObject->headers[$name]);
-		}
-		return $newObject;
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
 	public function getBody() {
 		return $this->stream;
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function withBody(StreamInterface $body) {
-		$newObject = clone $this;
-		$newObject->stream = $body;
-		return $newObject;
 	}
 }

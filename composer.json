@@ -10,10 +10,7 @@
 	"autoload": {
 		"psr-4": {
 			"Ixolit\\Dislo\\CDE\\": "./src"
-		},
-		"files": [
-			"./src/init.php"
-		]
+		}
 	},
 	"autoload-dev": {
 		"psr-4": {

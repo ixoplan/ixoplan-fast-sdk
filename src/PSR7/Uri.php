@@ -1,7 +1,8 @@
 <?php
 
-namespace Ixolit\Dislo\CDE;
+namespace Ixolit\Dislo\CDE\PSR7;
 
+use Ixolit\Dislo\CDE\Exceptions\CDEFeatureNotSupportedException;
 use Psr\Http\Message\UriInterface;
 
 /**
@@ -120,63 +121,79 @@ class Uri implements UriInterface {
 	 * {@inheritdoc}
 	 */
 	public function withScheme($scheme) {
-		$newObject = clone $this;
-		$newObject->scheme = $scheme;
-		return $newObject;
+		return new Uri(
+			$scheme,
+			$this->getHost(),
+			$this->getPort(),
+			$this->getPath(),
+			$this->getQuery()
+		);
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
 	public function withUserInfo($user, $password = null) {
-		$newObject = clone $this;
-		$newObject->userInfo = \urlencode($user) . ($password?':' . \urlencode($password):'');
-		return $newObject;
+		throw new CDEFeatureNotSupportedException('user info in PSR-7 objects');
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
 	public function withHost($host) {
-		$newObject = clone $this;
-		$newObject->host = $host;
-		return $newObject;
+		return new Uri(
+			$this->getScheme(),
+			$host,
+			$this->getPort(),
+			$this->getPath(),
+			$this->getQuery()
+		);
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
 	public function withPort($port) {
-		$newObject = clone $this;
-		$newObject->port = (int)$port;
-		return $newObject;
+		return new Uri(
+			$this->getScheme(),
+			$this->getHost(),
+			$port,
+			$this->getPath(),
+			$this->getQuery()
+		);
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
 	public function withPath($path) {
-		$newObject = clone $this;
-		$newObject->path = $path;
-		return $newObject;
+		return new Uri(
+			$this->getScheme(),
+			$this->getHost(),
+			$this->getPort(),
+			$path,
+			$this->getQuery()
+		);
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
 	public function withQuery($query) {
-		$newObject = clone $this;
-		$newObject->query = $query;
-		return $newObject;
+		return new Uri(
+			$this->getScheme(),
+			$this->getHost(),
+			$this->getPort(),
+			$this->getPath(),
+			$query
+		);
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
 	public function withFragment($fragment) {
-		$newObject = clone $this;
-		$newObject->fragment = $fragment;
-		return $newObject;
+		throw new CDEFeatureNotSupportedException('URI fragment');
 	}
 
 	/**

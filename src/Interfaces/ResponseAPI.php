@@ -2,6 +2,7 @@
 
 namespace Ixolit\Dislo\CDE\Interfaces;
 
+use Ixolit\Dislo\CDE\Exceptions\CookieSetFailedException;
 use Ixolit\Dislo\CDE\Exceptions\InvalidStatusCodeException;
 use Psr\Http\Message\ResponseInterface;
 
@@ -54,4 +55,15 @@ interface ResponseAPI {
 	 * @throws InvalidStatusCodeException if the status code is invalid.
 	 */
 	public function setStatusCode($statusCode);
+
+	/**
+	 * Sets a HTTP cookie in the response.
+	 *
+	 * @param string $name
+	 * @param string $value
+	 * @param int    $maxAge in seconds. 0 means session cookie.
+	 *
+	 * @throws CookieSetFailedException
+	 */
+	public function setCookie($name, $value, $maxAge = 0);
 }

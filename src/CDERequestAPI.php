@@ -6,10 +6,11 @@ use Ixolit\Dislo\CDE\Exceptions\CDEFeatureNotSupportedException;
 use Ixolit\Dislo\CDE\Exceptions\CookieNotSetException;
 use Ixolit\Dislo\CDE\Exceptions\InformationNotAvailableInContextException;
 use Ixolit\Dislo\CDE\Interfaces\RequestAPI;
+use Ixolit\Dislo\CDE\PSR7\ServerRequest;
+use Ixolit\Dislo\CDE\PSR7\Uri;
 use Ixolit\Dislo\CDE\WorkingObjects\Cookie;
 use Ixolit\Dislo\CDE\WorkingObjects\INETAddress;
 use Ixolit\Dislo\CDE\WorkingObjects\Layout;
-use Ixolit\Dislo\CDE\WorkingObjects\Map;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
@@ -157,6 +158,7 @@ class CDERequestAPI implements RequestAPI  {
 		}
 
 		$address = getRemoteAddress();
+
 		if ($address === null) {
 			throw new InformationNotAvailableInContextException('remote address');
 		}
@@ -184,24 +186,34 @@ class CDERequestAPI implements RequestAPI  {
 	 * @return ServerRequestInterface
 	 */
 	public function getPSR7() {
-		//todo add method
+		$http_build_query = function($array) {
+			$elements = [];
+			foreach ($array as $key => $value) {
+				$elements[] = urlencode($key) . '=' . urlencode($value);
+			}
+			return implode('&', $elements);
+		};
+		$cookies = [];
+		foreach ($this->getCookies() as $cookie) {
+			$cookies[$cookie->getName()] = $cookie->getValue();
+		}
 		$request = new ServerRequest(
 			'GET',
 			new Uri(
 				$this->getScheme(),
 				$this->getFQDN(),
 				($this->getScheme()=='https'?443:80),
-				$this->getPageLink(),
-				\http_build_query($this->getRequestParameters())
-			)
+				preg_replace('/^http(|s):\/\/[a-zA-Z0-9_\-\.:]+/', '', $this->getPageLink()),
+				$http_build_query($this->getRequestParameters())
+			),
+			[],
+			'',
+			'1.1',
+			$cookies,
+			[
+				'REMOTE_ADDR' => $this->getRemoteAddress()->__toString()
+			]
 		);
-
-		$cookies = [];
-		foreach ($this->getCookies() as $cookie) {
-			$cookies[$cookie->getName()] = $cookie->getValue();
-		}
-		$request = $request->withCookieParams($cookies);
-
 		return $request;
 	}
 }

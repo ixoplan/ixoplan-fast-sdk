@@ -1,6 +1,6 @@
 <?php
 
-namespace Ixolit\Dislo\CDE;
+namespace Ixolit\Dislo\CDE\PSR7;
 
 use Psr\Http\Message\StreamInterface;
 

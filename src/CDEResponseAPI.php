@@ -3,6 +3,7 @@
 namespace Ixolit\Dislo\CDE;
 
 use Ixolit\Dislo\CDE\Exceptions\CDEFeatureNotSupportedException;
+use Ixolit\Dislo\CDE\Exceptions\CookieSetFailedException;
 use Ixolit\Dislo\CDE\Exceptions\InvalidStatusCodeException;
 use Ixolit\Dislo\CDE\Interfaces\ResponseAPI;
 use Psr\Http\Message\ResponseInterface;
@@ -53,24 +54,69 @@ class CDEResponseAPI implements ResponseAPI {
 	/**
 	 * {@inheritdoc}
 	 */
+	public function setCookie($name, $value, $maxAge = 0) {
+		if (!\function_exists('setCookie')) {
+			throw new CDEFeatureNotSupportedException('setCookie');
+		}
+		if (!\setCookie($name, $value, $maxAge)) {
+			throw new CookieSetFailedException($name, $value, $maxAge);
+		}
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
 	public function sendPSR7(ResponseInterface $response) {
 		$this->setStatusCode($response->getStatusCode());
 		$headers = $response->getHeaders();
 
 		foreach ($headers as $header => $content) {
-			switch ($header) {
+			switch (strtolower($header)) {
 				case 'content-type':
-					$this->setContentType(\implode(';', $content));
+					$this->setContentType(\implode(',', $content));
 					break;
 				case 'location':
-					$this->redirectTo(\implode(';',$content), ($response->getStatusCode()==301?true:false));
+					$this->redirectTo(\implode(',',$content), ($response->getStatusCode()==301?true:false));
+					break;
+				case 'set-cookie':
+					foreach ($content as $cookie) {
+						$cookieData = [];
+						$parts = explode(';', $cookie);
+						$maxAge = 0;
+						foreach ($parts as $part) {
+							$partComponents = explode('=', $part);
+							$key = urldecode(trim($partComponents[0]));
+							if (isset($partComponents[1])) {
+								$value = urldecode(trim($partComponents[1]));
+							} else {
+								$value = true;
+							}
+							switch (strtolower($key)) {
+								case 'expires':
+									$maxAge = strtotime($value) - time();
+									break;
+								case 'domain':
+								case 'path':
+								case 'secure':
+								case 'httponly':
+									//ignore
+									break;
+								default:
+									$cookieData[$key] = $value;
+									break;
+							}
+						}
+						foreach ($cookieData as $key => $value) {
+							$this->setCookie($key, $value, $maxAge);
+						}
+					}
 					break;
 				default:
 					throw new CDEFeatureNotSupportedException('Sending header type ' . $header . ' is not supported');
-					break;
 			}
 		}
 
 		echo $response->getBody();
+		exit;
 	}
 }

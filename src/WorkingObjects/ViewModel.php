@@ -23,7 +23,18 @@ class ViewModel {
 	 * @return string
 	 */
 	public function url($variable) {
-		return \urlencode($this->data[$variable]);
+		return \urlencode($this->raw($variable));
+	}
+
+	/**
+	 * Retrieve a variable, and encode it for embedding into an URL, then encode it for HTML.
+	 *
+	 * @param string $variable
+	 *
+	 * @return string
+	 */
+	public function htmlUrl($variable) {
+		return \html(\urlencode($this->raw($variable)));
 	}
 
 	/**
@@ -34,7 +45,7 @@ class ViewModel {
 	 * @return string
 	 */
 	public function html($variable) {
-		return \html($this->data[$variable]);
+		return \html($this->raw($variable));
 	}
 
 	/**
@@ -45,7 +56,7 @@ class ViewModel {
 	 * @return string
 	 */
 	public function xml($variable) {
-		return \xml($this->data[$variable]);
+		return \xml($this->raw($variable));
 	}
 
 	/**
@@ -56,6 +67,17 @@ class ViewModel {
 	 * @return string
 	 */
 	public function js($variable) {
-		return \js($this->data[$variable]);
+		return \js($this->raw($variable));
+	}
+
+	/**
+	 * Retrieve an unencoded variable. Use with care.
+	 *
+	 * @param string $variable
+	 *
+	 * @return string
+	 */
+	public function raw($variable) {
+		return $this->data[$variable];
 	}
 }

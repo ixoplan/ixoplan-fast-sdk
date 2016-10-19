@@ -1,9 +1,10 @@
 <?php
 
-namespace Ixolit\Dislo\CDE;
+namespace Ixolit\Dislo\CDE\PSR7;
 
 use Ixolit\Dislo\CDE\Exceptions\CDEFeatureNotSupportedException;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
 
 /**
@@ -32,7 +33,7 @@ class ServerRequest extends Message implements ServerRequestInterface {
 
 	public function __construct(
 		$method,
-		Uri $uri,
+		UriInterface $uri,
 		array $headers = [],
 		$body = null,
 		$version = '1.1',
@@ -80,9 +81,15 @@ class ServerRequest extends Message implements ServerRequestInterface {
 	 * {@inheritdoc}
 	 */
 	public function withMethod($method) {
-		$newObject = clone $this;
-		$newObject->method = $method;
-		return $newObject;
+		return new ServerRequest(
+			$method,
+			$this->getUri(),
+			$this->getHeaders(),
+			$this->getBody(),
+			$this->getProtocolVersion(),
+			$this->getCookieParams(),
+			$this->getServerParams()
+		);
 	}
 
 	/**
@@ -96,8 +103,15 @@ class ServerRequest extends Message implements ServerRequestInterface {
 	 * {@inheritdoc}
 	 */
 	public function withUri(UriInterface $uri, $preserveHost = false) {
-		$newObject = clone $this;
-		$newObject->uri = $uri;
+		$newObject = new ServerRequest(
+			$this->getMethod(),
+			$uri,
+			$this->getHeaders(),
+			$this->getBody(),
+			$this->getProtocolVersion(),
+			$this->getCookieParams(),
+			$this->getServerParams()
+		);
 		if (!$preserveHost) {
 			$newObject = $newObject->withHeader('Host', $uri->getHost());
 		}
@@ -122,9 +136,15 @@ class ServerRequest extends Message implements ServerRequestInterface {
 	 * {@inheritdoc}
 	 */
 	public function withCookieParams(array $cookies) {
-		$newObject = clone $this;
-		$newObject->cookies = $cookies;
-		return $newObject;
+		return new ServerRequest(
+			$this->getMethod(),
+			$this->getUri(),
+			$this->getHeaders(),
+			$this->getBody(),
+			$this->getProtocolVersion(),
+			$cookies,
+			$this->getServerParams()
+		);
 	}
 
 	/**
@@ -165,7 +185,8 @@ class ServerRequest extends Message implements ServerRequestInterface {
 			\parse_str($this->getBody()->getContents(), $data);
 			return $data;
 		} else {
-			return null;
+			parse_str($this->uri->getQuery(), $data);
+			return $data;
 		}
 	}
 
@@ -202,5 +223,104 @@ class ServerRequest extends Message implements ServerRequestInterface {
 	 */
 	public function withoutAttribute($name) {
 		throw new CDEFeatureNotSupportedException('ServerRequest attributes');
+	}
+
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function withHeader($name, $value) {
+		$headers = $this->getHeaders();
+		if (\is_array($value)) {
+			$headers[$name] = $value;
+		} else {
+			$headers[$name] = [$value];
+		}
+		return new ServerRequest(
+			$this->getMethod(),
+			$this->getUri(),
+			$headers,
+			$this->getBody(),
+			$this->getProtocolVersion(),
+			$this->getCookieParams(),
+			$this->getServerParams()
+		);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function withAddedHeader($name, $value) {
+		$headers = $this->getHeaders();
+		if (!isset($headers[$name])) {
+			$headers[$name] = [];
+		}
+		if (\is_array($value)) {
+			foreach ($value as $v) {
+				$headers[$name][] = $v;
+			}
+		} else {
+			$headers[$name][] = $value;
+		}
+
+		return new ServerRequest(
+			$this->getMethod(),
+			$this->getUri(),
+			$headers,
+			$this->getBody(),
+			$this->getProtocolVersion(),
+			$this->getCookieParams(),
+			$this->getServerParams()
+		);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function withoutHeader($name) {
+		$headers = $this->getHeaders();
+		if (isset($headers[$name])) {
+			unset($headers[$name]);
+		}
+
+		return new ServerRequest(
+			$this->getMethod(),
+			$this->getUri(),
+			$headers,
+			$this->getBody(),
+			$this->getProtocolVersion(),
+			$this->getCookieParams(),
+			$this->getServerParams()
+		);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function withBody(StreamInterface $body) {
+		return new ServerRequest(
+			$this->getMethod(),
+			$this->getUri(),
+			$this->getHeaders(),
+			$body,
+			$this->getProtocolVersion(),
+			$this->getCookieParams(),
+			$this->getServerParams()
+		);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function withProtocolVersion($version) {
+		return new ServerRequest(
+			$this->getMethod(),
+			$this->getUri(),
+			$this->getHeaders(),
+			$this->getBody(),
+			$version,
+			$this->getCookieParams(),
+			$this->getServerParams()
+		);
 	}
 }

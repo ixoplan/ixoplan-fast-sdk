@@ -88,6 +88,7 @@ abstract class Form {
 	public function setFromRequest(ServerRequestInterface $request) {
 		$errors = [];
 		foreach ($this->fields as $field) {
+			$field->setErrors([]);
 			$fieldErrors = $field->setFromRequest($request);
 			if ($fieldErrors) {
 				$errors[$field->getName()] = $fieldErrors;

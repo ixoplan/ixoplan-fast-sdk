@@ -17,13 +17,19 @@ class CookieFormProcessor implements FormProcessorInterface {
 		$dataset = [];
 
 		foreach ($form->getFields() as $field) {
-			$dataset[$field->getName()] = $field->getValue();
+			$dataset[$field->getName()] = [];
+			if (!$field->isMasked()) {
+				$dataset[$field->getName()]['value'] = $field->getValue();
+			} else {
+				$dataset[$field->getName()]['value'] = '';
+			}
+			$dataset[$field->getName()]['errors'] = $field->getErrors();
 		}
 
 		return $response->withAddedHeader(
 			'Set-Cookie',
 			\urlencode($form->getKey() . '-form') . '=' .
-			\urlencode(\json_encode($dataset)));
+			\urlencode(\base64_encode(\json_encode($dataset))));
 	}
 
 	/**
@@ -44,17 +50,16 @@ class CookieFormProcessor implements FormProcessorInterface {
 
 		if (\array_key_exists($form->getKey() . '-form', $cookies)) {
 			try {
-				$data = \json_decode($cookies[$form->getKey() . '-form'], true, 10);
+				$data = \json_decode(base64_decode($cookies[$form->getKey() . '-form']), true);
 
 				foreach ($form->getFields() as $field) {
 					if (\array_key_exists($field->getName(), $data)) {
-						$field->setValue($data[$field->getName()]);
+						$field->setValue($data[$field->getName()]['value']);
+						$field->setErrors($data[$field->getName()]['errors']);
 					}
 				}
 			} catch (\Exception $e) {
-				$form->validate();
 			} catch (\Throwable $e) {
-				$form->validate();
 			}
 			return true;
 		} else {
