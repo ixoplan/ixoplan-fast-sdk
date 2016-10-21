@@ -4,11 +4,11 @@ namespace Ixolit\Dislo\CDE\Form;
 
 use Ixolit\Dislo\CDE\Validator\InArrayValidator;
 
-class DropDownField extends ChoiceField  {
+class RadioField extends ChoiceField  {
 	/**
 	 * {@inheritdoc}
 	 */
 	public function getType() {
-		return 'dropdown';
+		return 'radio';
 	}
 }

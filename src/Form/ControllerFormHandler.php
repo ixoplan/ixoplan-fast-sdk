@@ -16,6 +16,10 @@ abstract class ControllerFormHandler {
 	 * @var ResponseAPI
 	 */
 	private $responseAPI;
+	/**
+	 * @var CSRFTokenProvider
+	 */
+	private $csrfTokenProvider;
 
 	/**
 	 * This call should create the form object.
@@ -53,10 +57,13 @@ abstract class ControllerFormHandler {
 	public function __construct(
 		RequestAPI $requestAPI,
 		ResponseAPI $responseAPI,
-		FormProcessorInterface $formProcessor) {
+		FormProcessorInterface $formProcessor,
+		CSRFTokenProvider $csrfTokenProvider
+	) {
 		$this->requestAPI = $requestAPI;
 		$this->formProcessor = $formProcessor;
 		$this->responseAPI = $responseAPI;
+		$this->csrfTokenProvider = $csrfTokenProvider;
 	}
 
 	/**
@@ -129,6 +136,13 @@ abstract class ControllerFormHandler {
 			'1.1'
 		);
 		return $this->getFormProcessor()->cleanup($form, $response);
+	}
+
+	/**
+	 * @return CSRFTokenProvider
+	 */
+	protected function getCsrfTokenProvider() {
+		return $this->csrfTokenProvider;
 	}
 	//endregion
 

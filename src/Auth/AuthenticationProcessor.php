@@ -6,6 +6,9 @@ use Ixolit\Dislo\CDE\Exceptions\CookieNotSetException;
 use Ixolit\Dislo\CDE\Interfaces\RequestAPI;
 use Ixolit\Dislo\CDE\Interfaces\ResponseAPI;
 use Ixolit\Dislo\Client;
+use Ixolit\Dislo\Exceptions\AuthenticationException;
+use Ixolit\Dislo\Exceptions\AuthenticationInvalidCredentialsException;
+use Ixolit\Dislo\Exceptions\AuthenticationRateLimitedException;
 use Ixolit\Dislo\Exceptions\InvalidTokenException;
 use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
 
@@ -19,27 +22,49 @@ class AuthenticationProcessor {
 	 * @var ResponseAPI
 	 */
 	private $responseApi;
+	/**
+	 * @var int
+	 */
+	private $tokenTimeout;
 
 	/**
 	 * @param RequestAPI  $requestApi
 	 * @param ResponseAPI $responseApi
+	 * @param int         $tokenTimeout
 	 */
-	public function __construct(RequestAPI $requestApi, ResponseAPI $responseApi) {
+	public function __construct(RequestAPI $requestApi, ResponseAPI $responseApi, $tokenTimeout = 2592000) {
 		$this->requestApi  = $requestApi;
 		$this->responseApi = $responseApi;
+		$this->tokenTimeout = $tokenTimeout;
 	}
 
-	public function authenticate($uniqueUserField, $password, $tokenTimeout = 2592000) {
+	/**
+	 * Authenticate a user. If successful, the authentication token is set into a cookie, and also returned.
+	 *
+	 * @param string $uniqueUserField
+	 * @param string $password
+	 *
+	 * @return string
+	 *
+	 * @throws AuthenticationRateLimitedException
+	 * @throws AuthenticationInvalidCredentialsException
+	 * @throws AuthenticationException
+	 */
+	public function authenticate($uniqueUserField, $password) {
 		$apiClient = new Client();
 		$authenticationResponse = $apiClient->userAuthenticate(
 			$uniqueUserField,
 			$password,
 			$this->requestApi->getRemoteAddress()->__toString(),
-			$tokenTimeout
+			$this->tokenTimeout
 		);
-		$this->responseApi->setCookie('auth-token', $authenticationResponse->getAuthToken());
+		$this->responseApi->setCookie('auth-token', $authenticationResponse->getAuthToken(), $this->tokenTimeout);
+		return $authenticationResponse->getAuthToken();
 	}
 
+	/**
+	 * Invalidate the current authentication token.
+	 */
 	public function deauthenticate() {
 		$authToken = $this->requestApi->getCookie('auth-token');
 		if ($authToken) {
@@ -52,7 +77,7 @@ class AuthenticationProcessor {
 	}
 
 	/**
-	 * Checks and extends a token.
+	 * Checks and extends a token from cookie.
 	 *
 	 * @return string
 	 *
@@ -67,6 +92,7 @@ class AuthenticationProcessor {
 		$apiClient = new Client();
 		try {
 			$apiClient->userUpdateToken($authToken, 'x', $this->requestApi->getRemoteAddress());
+			$this->responseApi->setCookie('auth-token', $authToken, $this->tokenTimeout);
 			return $authToken;
 		} catch (ObjectNotFoundException $e) {
 			throw new AuthenticationRequiredException();

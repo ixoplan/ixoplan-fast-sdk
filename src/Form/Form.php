@@ -2,12 +2,54 @@
 
 namespace Ixolit\Dislo\CDE\Form;
 
+use Ixolit\Dislo\CDE\Validator\CSRFTokenValidator;
+use Ixolit\Dislo\CDE\Validator\ExactValueValidator;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * This class was ported from the Piccolo form library with permission.
  */
 abstract class Form {
+	/**
+	 * @var CSRFTokenProvider
+	 */
+	private $csrfTokenProvider;
+	/**
+	 * @var string
+	 */
+	private $action;
+	/**
+	 * @var string
+	 */
+	private $method;
+
+	/**
+	 * Generic, form errors.
+	 *
+	 * @var string[]
+	 */
+	private $errors = [];
+
+	/**
+	 * @param string $action
+	 * @param string $method
+	 * @param CSRFTokenProvider $csrfTokenProvider
+	 */
+	public function __construct($action = '', $method = 'POST', CSRFTokenProvider $csrfTokenProvider) {
+		$this->csrfTokenProvider = $csrfTokenProvider;
+		$this->action = $action;
+		$this->method = $method;
+
+		if ($this->method == 'POST') {
+			$csrfField = new HiddenField('csrf-token');
+			$csrfField->addValidator(new CSRFTokenValidator($csrfTokenProvider->getCSRFToken()));
+			$csrfField->setValue($csrfTokenProvider->getCSRFToken());
+			//Don't transfer the value back to the form.
+			$csrfField->setMasked(true);
+			$this->addField($csrfField);
+		}
+	}
+
 	/**
 	 * @var FormField[]
 	 */
@@ -95,5 +137,19 @@ abstract class Form {
 			}
 		}
 		return $errors;
+	}
+
+	/**
+	 * Return the form-specific errors. Does not return the field errors.
+	 */
+	public function getErrors() {
+		return $this->errors;
+	}
+
+	/**
+	 * @param string[] $errors
+	 */
+	public function setErrors($errors) {
+		$this->errors = $errors;
 	}
 }

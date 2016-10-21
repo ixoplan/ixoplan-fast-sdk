@@ -20,11 +20,11 @@ class CookieFormProcessor implements FormProcessorInterface {
 			$dataset[$field->getName()] = [];
 			if (!$field->isMasked()) {
 				$dataset[$field->getName()]['value'] = $field->getValue();
-			} else {
-				$dataset[$field->getName()]['value'] = '';
 			}
 			$dataset[$field->getName()]['errors'] = $field->getErrors();
 		}
+
+		$dataset['_errors'] = $form->getErrors();
 
 		return $response->withAddedHeader(
 			'Set-Cookie',
@@ -50,13 +50,18 @@ class CookieFormProcessor implements FormProcessorInterface {
 
 		if (\array_key_exists($form->getKey() . '-form', $cookies)) {
 			try {
-				$data = \json_decode(base64_decode($cookies[$form->getKey() . '-form']), true);
+				$data = \json_decode(\base64_decode($cookies[$form->getKey() . '-form']), true);
 
 				foreach ($form->getFields() as $field) {
 					if (\array_key_exists($field->getName(), $data)) {
-						$field->setValue($data[$field->getName()]['value']);
+						if (isset($data[$field->getName()]['value'])) {
+							$field->setValue($data[$field->getName()]['value']);
+						}
 						$field->setErrors($data[$field->getName()]['errors']);
 					}
+				}
+				if (isset($data['_errors'])) {
+					$form->setErrors($data['_errors']);
 				}
 			} catch (\Exception $e) {
 			} catch (\Throwable $e) {

@@ -143,9 +143,7 @@ abstract class FormField {
 		if (\array_key_exists($this->getName(), $parsedBody)) {
 			$value = $parsedBody[$this->getName()];
 		}
-		if (!\is_null($value)) {
-			$this->setValue($value);
-		}
+		$this->setValue($value);
 		$this->validate();
 
 		return $this->errors;
