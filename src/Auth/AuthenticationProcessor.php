@@ -56,7 +56,8 @@ class AuthenticationProcessor {
 			$uniqueUserField,
 			$password,
 			$this->requestApi->getRemoteAddress()->__toString(),
-			$this->tokenTimeout
+			$this->tokenTimeout,
+			'{}'
 		);
 		$this->responseApi->setCookie('auth-token', $authenticationResponse->getAuthToken(), $this->tokenTimeout);
 		return $authenticationResponse->getAuthToken();
@@ -66,13 +67,14 @@ class AuthenticationProcessor {
 	 * Invalidate the current authentication token.
 	 */
 	public function deauthenticate() {
-		$authToken = $this->requestApi->getCookie('auth-token');
-		if ($authToken) {
+		try {
+			$authToken = $this->extendToken();
 			$apiClient = new Client();
 			try {
 				$apiClient->userDeauthenticate($authToken);
 			} catch (ObjectNotFoundException $e) {
 			}
+		} catch (AuthenticationRequiredException $e) {
 		}
 	}
 
@@ -91,8 +93,8 @@ class AuthenticationProcessor {
 		}
 		$apiClient = new Client();
 		try {
-			$apiClient->userUpdateToken($authToken, 'x', $this->requestApi->getRemoteAddress());
-			$this->responseApi->setCookie('auth-token', $authToken, $this->tokenTimeout);
+			$extendResponse = $apiClient->userUpdateToken($authToken, '{}', $this->requestApi->getRemoteAddress());
+			$this->responseApi->setCookie('auth-token', $extendResponse->getAuthToken()->getToken(), $this->tokenTimeout);
 			return $authToken;
 		} catch (ObjectNotFoundException $e) {
 			throw new AuthenticationRequiredException();

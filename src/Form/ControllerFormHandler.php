@@ -89,7 +89,14 @@ abstract class ControllerFormHandler {
 	//endregion
 
 	public function isFormPost() {
-		return \count($this->requestAPI->getRequestParameters());
+		$parameters = $this->requestAPI->getRequestParameters();
+		if (!isset($parameters['_form'])) {
+			return false;
+		}
+		if ($parameters['_form'] == $this->getForm()->getKey()) {
+			return true;
+		}
+		return false;
 	}
 
 	public function getForm() {

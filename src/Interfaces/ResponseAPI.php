@@ -33,12 +33,15 @@ interface ResponseAPI {
 	 * This function is only supported within pages. Templates residing within the files/ or static/ folders should
 	 * not call this function.
 	 *
-	 * @param string      $page      is a relative path to a local page on the site (e.g. "/about/legal").
+	 * @param string      $page           is a relative path to a local page on the site (e.g. "/about/legal").
 	 * @param string|null $lang
-	 * @param bool        $permanent specifies if the redirect should be permanent (Status Code 301 - "Moved
-	 *                               Permanently"), or temporary (Status Code 302 - "Found").
+	 * @param bool        $permanent      specifies if the redirect should be permanent (Status Code 301 - "Moved
+	 *                                    Permanently"), or temporary (Status Code 302 - "Found").
+	 * @param bool        $abortRendering abort the rendering after this call.
+	 *
+	 * @return
 	 */
-	public function redirectToPage($page, $lang = null, $permanent = false);
+	public function redirectToPage($page, $lang = null, $permanent = false, $abortRendering = true);
 
 	/**
 	 * Sets the content type for the current response. Useful for sending out JSON.

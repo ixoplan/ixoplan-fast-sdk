@@ -48,6 +48,10 @@ abstract class Form {
 			$csrfField->setMasked(true);
 			$this->addField($csrfField);
 		}
+		$formField = new HiddenField('_form');
+		$formField->setValue($this->getKey());
+		$formField->setMasked(true);
+		$this->addField($formField);
 	}
 
 	/**

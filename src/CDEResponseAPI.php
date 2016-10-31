@@ -22,11 +22,14 @@ class CDEResponseAPI implements ResponseAPI {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function redirectToPage($page, $lang = null, $permanent = false) {
+	public function redirectToPage($page, $lang = null, $permanent = false, $abortRendering = true) {
 		if (!\function_exists('redirectToPage')) {
 			throw new CDEFeatureNotSupportedException('redirectToPage');
 		}
 		redirectToPage($page, $lang, $permanent);
+		if ($abortRendering) {
+			exit;
+		}
 	}
 
 	/**
