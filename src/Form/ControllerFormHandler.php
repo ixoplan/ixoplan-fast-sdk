@@ -6,6 +6,7 @@ use Ixolit\Dislo\CDE\Interfaces\FormProcessorInterface;
 use Ixolit\Dislo\CDE\Interfaces\RequestAPI;
 use Ixolit\Dislo\CDE\Interfaces\ResponseAPI;
 use Ixolit\Dislo\CDE\PSR7\Response;
+use Ixolit\Dislo\CDE\PSR7\Uri;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
@@ -125,7 +126,15 @@ abstract class ControllerFormHandler {
 	}
 
 	//region Helper functions
-	protected function storeAndCreateRedirectResponse(Form $form, UriInterface $uri) {
+	/**
+	 * Store the form data for future processing and create a redirect response.
+	 *
+	 * @param Form         $form
+	 * @param string|UriInterface $uri
+	 *
+	 * @return ResponseInterface
+	 */
+	protected function storeAndCreateRedirectResponse(Form $form, $uri) {
 		$response = new Response(
 			302,
 			['Location' => [(string)$uri]],
@@ -135,10 +144,21 @@ abstract class ControllerFormHandler {
 		return $this->getFormProcessor()->store($form, $response);
 	}
 
-	protected function cleanAndCreateRedirectResponse(Form $form, UriInterface $uri) {
+	/**
+	 * Clean form data from cookies and redirect to target page.
+	 *
+	 * @param Form $form
+	 * @param string|UriInterface $uri
+	 *
+	 * @return ResponseInterface
+	 */
+	protected function cleanAndCreateRedirectResponse(Form $form, $uri) {
+		if ($uri instanceof Uri) {
+			$uri = (string)$uri;
+		}
 		$response = new Response(
 			302,
-			['Location' => [(string)$uri]],
+			['Location' => [$uri]],
 			'',
 			'1.1'
 		);
