@@ -23,13 +23,22 @@ interface RequestAPI {
 	public function getScheme();
 
 	/**
-	 * Returns the resolved, normalized vhost name for the current request.
+	 * Returns the resolved, normalized vhost name for the current request for inclusion in URLs
 	 *
 	 * @return string
 	 *
 	 * @throws InformationNotAvailableInContextException
 	 */
 	public function getVhost();
+
+	/**
+	 * Returns the resolved, normalized vhost name for the current request for inclusion in path names.
+	 *
+	 * @return string
+	 *
+	 * @throws InformationNotAvailableInContextException
+	 */
+	public function getEffectiveVhost();
 
 	/**
 	 * Returns the fully qualified domain name for the current request, e.g. www.dislo.com

@@ -19,9 +19,9 @@ class Partials {
 	public static function load($name, $data = []) {
 		$tryFiles = [];
 		if (function_exists('getCurrentLayout') && \getCurrentLayout()) {
-			$tryFiles[] =  '/vhosts/' . getVhost() . '/layouts/' . getCurrentLayout() . '/partials/' . $name . '.php';
+			$tryFiles[] =  '/vhosts/' . getEffectiveVhost() . '/layouts/' . getCurrentLayout() . '/partials/' . $name . '.php';
 		}
-		$tryFiles[] = '/vhosts/' . getVhost() . '/partials/' . $name . '.php';
+		$tryFiles[] = '/vhosts/' . getEffectiveVhost() . '/partials/' . $name . '.php';
 
 		\extract($data);
 

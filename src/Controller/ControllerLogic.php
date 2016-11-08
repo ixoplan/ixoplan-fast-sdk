@@ -38,7 +38,7 @@ class ControllerLogic {
 
 		try {
 			$path = '/vhosts/';
-			$path .= urlencode($this->requestApi->getVhost());
+			$path .= urlencode($this->requestApi->getEffectiveVhost());
 			$path .= '/layouts/';
 			$path .= $this->requestApi->getLayout()->getName();
 			$path .= '/pages';

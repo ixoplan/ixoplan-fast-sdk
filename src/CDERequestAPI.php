@@ -41,6 +41,20 @@ class CDERequestAPI implements RequestAPI  {
 		return $vhost;
 	}
 
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getEffectiveVhost() {
+		if (!\function_exists('getEffectiveVhost')) {
+			throw new CDEFeatureNotSupportedException('getEffectiveVhost');
+		}
+		$vhost = getEffectiveVhost();
+		if ($vhost === null) {
+			throw new InformationNotAvailableInContextException('effective vhost');
+		}
+		return $vhost;
+	}
+
 	public function getFQDN() {
 		if (!\function_exists('getFQDN')) {
 			throw new CDEFeatureNotSupportedException('getFQDN');
@@ -111,6 +125,7 @@ class CDERequestAPI implements RequestAPI  {
 
 		return new Layout(
 			$this->getVhost(),
+			$this->getEffectiveVhost(),
 			$layoutName
 		);
 	}
