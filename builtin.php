@@ -328,11 +328,19 @@ function setMeta($meta, $value, $lang = null) {
 }
 
 /**
- * Gets the name of the vhost for the current request.
+ * Gets the name of the vhost for the current request in an URL.
  *
  * @return string
  */
 function getVhost() {
+}
+
+/**
+ * Gets the name of the vhost for the current request for inclusion in a path
+ *
+ * @return string
+ */
+function getEffectiveVhost() {
 }
 
 /**
