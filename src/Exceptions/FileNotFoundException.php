@@ -10,3 +10,4 @@ class FileNotFoundException extends FilesystemException {
 		parent::__construct('File or directory not found: ', $filename);
 	}
 }
+

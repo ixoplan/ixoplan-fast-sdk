@@ -156,4 +156,18 @@ abstract class Form {
 	public function setErrors($errors) {
 		$this->errors = $errors;
 	}
+
+	/**
+	 * @return string
+	 */
+	public function getAction() {
+		return $this->action;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getMethod() {
+		return $this->method;
+	}
 }

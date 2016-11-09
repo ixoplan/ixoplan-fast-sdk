@@ -67,4 +67,8 @@ class CDE {
 			self::getRequestAPI()
 		);
 	}
+
+	public static function getDisloClient() {
+		return new CDEDisloClient();
+	}
 }

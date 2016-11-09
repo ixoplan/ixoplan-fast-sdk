@@ -79,16 +79,16 @@ class CDEResponseAPI implements ResponseAPI {
 					$this->setContentType(\implode(',', $content));
 					break;
 				case 'location':
-					$this->redirectTo(\implode(',',$content), ($response->getStatusCode()==301?true:false));
+					$this->redirectTo(\implode(',', $content), ($response->getStatusCode() == 301 ? true : false));
 					break;
 				case 'set-cookie':
 					foreach ($content as $cookie) {
 						$cookieData = [];
-						$parts = explode(';', $cookie);
-						$maxAge = 0;
+						$parts      = explode(';', $cookie);
+						$maxAge     = 0;
 						foreach ($parts as $part) {
 							$partComponents = explode('=', $part);
-							$key = urldecode(trim($partComponents[0]));
+							$key            = urldecode(trim($partComponents[0]));
 							if (isset($partComponents[1])) {
 								$value = urldecode(trim($partComponents[1]));
 							} else {
@@ -115,7 +115,8 @@ class CDEResponseAPI implements ResponseAPI {
 					}
 					break;
 				default:
-					throw new CDEFeatureNotSupportedException('Sending header type ' . $header . ' is not supported');
+					throw new CDEFeatureNotSupportedException('Sending header type ' . $header .
+						' is not supported');
 			}
 		}
 
