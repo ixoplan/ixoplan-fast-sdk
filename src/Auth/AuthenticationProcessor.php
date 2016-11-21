@@ -81,15 +81,19 @@ class AuthenticationProcessor {
 	/**
 	 * Checks and extends a token from cookie.
 	 *
+	 * @param null $authToken
+	 *
 	 * @return string
 	 *
 	 * @throws AuthenticationRequiredException
 	 */
-	public function extendToken() {
-		try {
-			$authToken = $this->requestApi->getCookie('auth-token')->getValue();
-		} catch (CookieNotSetException $e) {
-			throw new AuthenticationRequiredException();
+	public function extendToken($authToken = null) {
+		if (!$authToken) {
+			try {
+				$authToken = $this->requestApi->getCookie('auth-token')->getValue();
+			} catch (CookieNotSetException $e) {
+				throw new AuthenticationRequiredException();
+			}
 		}
 		$apiClient = new Client();
 		try {
