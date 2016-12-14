@@ -196,9 +196,19 @@ class CDERequestAPI implements RequestAPI  {
 	}
 
 	/**
-	 * Returns a PSR-7 ServerRequestInterface object
-	 *
-	 * @return ServerRequestInterface
+	 * {@inheritdoc}
+	 */
+	public function getRequestParameter($parameter) {
+		$parameters = $this->getRequestParameters();
+		if (isset($parameters[$parameter])) {
+			return $parameters[$parameter];
+		} else {
+			return null;
+		}
+	}
+
+	/**
+	 * {@inheritdoc}
 	 */
 	public function getPSR7() {
 		$http_build_query = function($array) {

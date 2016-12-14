@@ -113,12 +113,21 @@ interface RequestAPI {
 	public function getRemoteAddress();
 
 	/**
-	 * Returns a dictionary containing all request parameter/value pairs if no name is given. Substitutes the $_GET
+	 * Returns a dictionary containing all request parameter/value pairs if no name is given. Substitutes the $_REQUEST
 	 * superglobal.
 	 *
 	 * @return array
 	 */
 	public function getRequestParameters();
+
+	/**
+	 * Returns a single request parameter. Substitutes the $_REQUEST superglobal.
+	 *
+	 * @param string $parameter
+	 *
+	 * @return array
+	 */
+	public function getRequestParameter($parameter);
 
 	/**
 	 * Returns a PSR-7 ServerRequestInterface object
