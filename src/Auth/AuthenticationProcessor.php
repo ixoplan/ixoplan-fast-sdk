@@ -91,6 +91,10 @@ class AuthenticationProcessor {
 		if (!$authToken) {
 			try {
 				$authToken = $this->requestApi->getCookie('auth-token')->getValue();
+				if (empty($authToken)) {
+					$this->responseApi->setCookie('auth-token', '', 1);
+					throw new AuthenticationRequiredException();
+				}
 			} catch (CookieNotSetException $e) {
 				throw new AuthenticationRequiredException();
 			}

@@ -4,6 +4,7 @@ namespace Ixolit\Dislo\CDE\Controller;
 
 use Ixolit\Dislo\CDE\Auth\AuthenticationRequiredException;
 use Ixolit\Dislo\CDE\Exceptions\ControllerSkipViewException;
+use Ixolit\Dislo\CDE\Exceptions\InformationNotAvailableInContextException;
 use Ixolit\Dislo\CDE\Interfaces\FilesystemAPI;
 use Ixolit\Dislo\CDE\Interfaces\RequestAPI;
 use Ixolit\Dislo\CDE\Interfaces\ResponseAPI;
@@ -64,7 +65,7 @@ class ControllerLogic {
 		} catch (AuthenticationRequiredException $e) {
 			if ($loginPage = getMeta('loginPage')) {
 				$currentUri = $this->requestApi->getPSR7()->getUri();
-				$newUri = $currentUri
+				$newUri     = $currentUri
 					->withPath('/' . $this->requestApi->getLanguage() . $loginPage)
 					->withQuery('backurl=' . \urlencode($currentUri->getPath()));
 				$this->responseApi->sendPSR7(new Response(302, [
@@ -73,6 +74,9 @@ class ControllerLogic {
 			} else {
 				throw $e;
 			}
+		} catch (InformationNotAvailableInContextException $e) {
+			// We are not in a page, no controller logic.
+			return;
 		} catch (\Exception $e) {
 			if (\function_exists('previewInfo') && previewInfo()) {
 				include(__DIR__ . '/errorpage.php');
