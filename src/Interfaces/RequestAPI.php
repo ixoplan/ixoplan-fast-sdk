@@ -125,7 +125,7 @@ interface RequestAPI {
 	 *
 	 * @param string $parameter
 	 *
-	 * @return array
+	 * @return string|null
 	 */
 	public function getRequestParameter($parameter);
 
