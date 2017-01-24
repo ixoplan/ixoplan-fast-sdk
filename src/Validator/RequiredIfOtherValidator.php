@@ -29,7 +29,7 @@ class RequiredIfOtherValidator extends RequiredValidator {
 	 * @return bool
 	 */
 	public function isValid($value) {
-		if ($this->otherField->getValue() != $value) {
+		if ($this->otherField->getValue() != $this->otherValue) {
 			return true;
 		}
 		return parent::isValid($value);
