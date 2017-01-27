@@ -14,7 +14,7 @@ use Ixolit\Dislo\CDE\Interfaces\ResponseAPI;
  */
 class CDECookieCache {
 
-    const TOKEN_TIMEOUT_THIRTY_DAYS = 2592000;
+    const COOKIE_TIMEOUT_THIRTY_DAYS = 2592000;
 
     /** @var CDECookieCache */
     private static $instance;
@@ -37,20 +37,6 @@ class CDECookieCache {
     protected function __clone() {}
 
     /**
-     * @return RequestApi
-     */
-    protected function getRequestApi() {
-        return $this->requestApi;
-    }
-
-    /**
-     * @return ResponseAPI
-     */
-    protected function getResponseApi() {
-        return $this->responseApi;
-    }
-
-    /**
      * @return CDECookieCache
      */
     public static function getInstance() {
@@ -64,20 +50,20 @@ class CDECookieCache {
     /**
      * @param string $cookieName
      * @param string $value
-     * @param int    $tokenTimeout
+     * @param int    $cookieTimeout
      *
      * @return $this
      */
-    public function write($cookieName, $value, $tokenTimeout = self::TOKEN_TIMEOUT_THIRTY_DAYS) {
+    public function write($cookieName, $value, $cookieTimeout = self::COOKIE_TIMEOUT_THIRTY_DAYS) {
         return $this
             ->setCookieValue($cookieName, $value)
-            ->storeCookieData($cookieName, $value, $tokenTimeout);
+            ->storeCookieData($cookieName, $value, $cookieTimeout);
     }
 
     /**
      * @param string $cookieName
      *
-     * @return string
+     * @return string|null
      */
     public function read($cookieName) {
         $cookieValue = $this->getCookieValue($cookieName);
@@ -85,7 +71,9 @@ class CDECookieCache {
         if ($cookieValue === null) {
             $cookieValue = $this->restoreCookieData($cookieName);
 
-            $this->setCookieValue($cookieName, $cookieValue);
+            if ($cookieValue) {
+                $this->setCookieValue($cookieName, $cookieValue);
+            }
         }
 
         return $cookieValue;
@@ -111,6 +99,20 @@ class CDECookieCache {
         $this->delete($cookieName);
 
         return $cookieValue;
+    }
+
+    /**
+     * @return RequestApi
+     */
+    protected function getRequestApi() {
+        return $this->requestApi;
+    }
+
+    /**
+     * @return ResponseAPI
+     */
+    protected function getResponseApi() {
+        return $this->responseApi;
     }
 
     /**
@@ -141,12 +143,12 @@ class CDECookieCache {
     /**
      * @param string $cookieName
      * @param string $cookieValue
-     * @param int    $tokenTimeout
+     * @param int    $cookieTimeout
      *
      * @return $this
      */
-    protected function storeCookieData($cookieName, $cookieValue, $tokenTimeout) {
-        $this->getResponseApi()->setCookie($cookieName, $cookieValue, $tokenTimeout);
+    protected function storeCookieData($cookieName, $cookieValue, $cookieTimeout) {
+        $this->getResponseApi()->setCookie($cookieName, $cookieValue, $cookieTimeout);
 
         return $this;
     }
