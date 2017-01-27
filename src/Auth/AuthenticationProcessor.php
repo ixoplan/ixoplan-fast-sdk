@@ -2,6 +2,7 @@
 
 namespace Ixolit\Dislo\CDE\Auth;
 
+use Ixolit\Dislo\CDE\CDECookieCache;
 use Ixolit\Dislo\CDE\Exceptions\CookieNotSetException;
 use Ixolit\Dislo\CDE\Interfaces\RequestAPI;
 use Ixolit\Dislo\CDE\Interfaces\ResponseAPI;
@@ -13,6 +14,9 @@ use Ixolit\Dislo\Exceptions\InvalidTokenException;
 use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
 
 class AuthenticationProcessor {
+
+	const COOKIE_NAME_AUTH_TOKEN = 'auth-token';
+
 	/**
 	 * @var RequestAPI
 	 */
@@ -59,7 +63,7 @@ class AuthenticationProcessor {
 			$this->tokenTimeout,
 			'{}'
 		);
-		$this->responseApi->setCookie('auth-token', $authenticationResponse->getAuthToken(), $this->tokenTimeout);
+		CDECookieCache::getInstance()->write(self::COOKIE_NAME_AUTH_TOKEN, $authenticationResponse->getAuthToken());
 		return $authenticationResponse->getAuthToken();
 	}
 
@@ -74,7 +78,7 @@ class AuthenticationProcessor {
 				$apiClient->userDeauthenticate($authToken);
 
 				//delete auth cookie
-				$this->responseApi->setCookie('auth-token', null, -1);
+				CDECookieCache::getInstance()->delete(self::COOKIE_NAME_AUTH_TOKEN);
 			} catch (ObjectNotFoundException $e) {
 			}
 		} catch (AuthenticationRequiredException $e) {
@@ -93,9 +97,9 @@ class AuthenticationProcessor {
 	public function extendToken($authToken = null) {
 		if (!$authToken) {
 			try {
-				$authToken = $this->requestApi->getCookie('auth-token')->getValue();
+				$authToken = CDECookieCache::getInstance()->read(self::COOKIE_NAME_AUTH_TOKEN);
 				if (empty($authToken)) {
-					$this->responseApi->setCookie('auth-token', '', 1);
+					CDECookieCache::getInstance()->delete(self::COOKIE_NAME_AUTH_TOKEN);
 					throw new AuthenticationRequiredException();
 				}
 			} catch (CookieNotSetException $e) {
@@ -105,7 +109,11 @@ class AuthenticationProcessor {
 		$apiClient = new Client();
 		try {
 			$extendResponse = $apiClient->userUpdateToken($authToken, '{}', $this->requestApi->getRemoteAddress());
-			$this->responseApi->setCookie('auth-token', $extendResponse->getAuthToken()->getToken(), $this->tokenTimeout);
+			CDECookieCache::getInstance()->write(
+				self::COOKIE_NAME_AUTH_TOKEN,
+				$extendResponse->getAuthToken()->getToken(),
+				$this->tokenTimeout
+			);
 			return $authToken;
 		} catch (ObjectNotFoundException $e) {
 			throw new AuthenticationRequiredException();
