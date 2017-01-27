@@ -72,6 +72,9 @@ class AuthenticationProcessor {
 			$apiClient = new Client();
 			try {
 				$apiClient->userDeauthenticate($authToken);
+
+				//delete auth cookie
+				$this->responseApi->setCookie('auth-token', null, -1);
 			} catch (ObjectNotFoundException $e) {
 			}
 		} catch (AuthenticationRequiredException $e) {
