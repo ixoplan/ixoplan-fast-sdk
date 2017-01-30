@@ -2,11 +2,14 @@
 
 namespace Ixolit\Dislo\CDE\Form;
 
-use Ixolit\Dislo\CDE\Exceptions\CookieNotSetException;
+use Ixolit\Dislo\CDE\CDECookieCache;
 use Ixolit\Dislo\CDE\Interfaces\RequestAPI;
 use Ixolit\Dislo\CDE\Interfaces\ResponseAPI;
 
 class CookieCSRFTokenProvider implements CSRFTokenProvider {
+
+	const COOKIE_NAME_CSRF_TOKEN = 'csrf-token';
+
 	/**
 	 * @var RequestAPI
 	 */
@@ -23,15 +26,16 @@ class CookieCSRFTokenProvider implements CSRFTokenProvider {
 		$this->requestAPI = $requestAPI;
 		$this->responseAPI = $responseAPI;
 
-		$this->responseAPI->setCookie('csrf-token', $this->getCSRFToken());
+		CDECookieCache::getInstance()->write(self::COOKIE_NAME_CSRF_TOKEN, $this->getCSRFToken());
 	}
 
 	public function getCSRFToken() {
-		try {
-			$token = $this->requestAPI->getCookie('csrf-token')->getValue();
-		} catch (CookieNotSetException $e) {
+		$token = CDECookieCache::getInstance()->read(self::COOKIE_NAME_CSRF_TOKEN);
+
+		if ($token === null) {
 			$token = \md5(\mt_rand(PHP_INT_MIN, PHP_INT_MAX));
 		}
+
 		return $token;
 	}
 }
