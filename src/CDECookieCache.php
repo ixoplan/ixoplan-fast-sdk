@@ -81,6 +81,16 @@ class CDECookieCache {
 
     /**
      * @param string $cookieName
+     * @param int    $cookieTimeout
+     *
+     * @return $this
+     */
+    public function renew($cookieName, $cookieTimeout = self::COOKIE_TIMEOUT_THIRTY_DAYS) {
+        return $this->write($cookieName, $this->read($cookieName), $cookieTimeout);
+    }
+
+    /**
+     * @param string $cookieName
      *
      * @return $this
      */
