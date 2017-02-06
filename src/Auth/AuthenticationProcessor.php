@@ -3,10 +3,10 @@
 namespace Ixolit\Dislo\CDE\Auth;
 
 use Ixolit\Dislo\CDE\CDECookieCache;
+use Ixolit\Dislo\CDE\CDEDisloClient;
 use Ixolit\Dislo\CDE\Exceptions\CookieNotSetException;
 use Ixolit\Dislo\CDE\Interfaces\RequestAPI;
 use Ixolit\Dislo\CDE\Interfaces\ResponseAPI;
-use Ixolit\Dislo\Client;
 use Ixolit\Dislo\Exceptions\AuthenticationException;
 use Ixolit\Dislo\Exceptions\AuthenticationInvalidCredentialsException;
 use Ixolit\Dislo\Exceptions\AuthenticationRateLimitedException;
@@ -55,7 +55,7 @@ class AuthenticationProcessor {
 	 * @throws AuthenticationException
 	 */
 	public function authenticate($uniqueUserField, $password) {
-		$apiClient = new Client();
+		$apiClient = new CDEDisloClient();
 		$authenticationResponse = $apiClient->userAuthenticate(
 			$uniqueUserField,
 			$password,
@@ -73,7 +73,7 @@ class AuthenticationProcessor {
 	public function deauthenticate() {
 		try {
 			$authToken = $this->extendToken();
-			$apiClient = new Client();
+			$apiClient = new CDEDisloClient();
 			try {
 				$apiClient->userDeauthenticate($authToken);
 
@@ -106,7 +106,7 @@ class AuthenticationProcessor {
 				throw new AuthenticationRequiredException();
 			}
 		}
-		$apiClient = new Client();
+		$apiClient = new CDEDisloClient();
 		try {
 			$extendResponse = $apiClient->userUpdateToken($authToken, '{}', $this->requestApi->getRemoteAddress());
 			CDECookieCache::getInstance()->write(

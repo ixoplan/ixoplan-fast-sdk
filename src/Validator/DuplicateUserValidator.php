@@ -2,8 +2,7 @@
 
 namespace Ixolit\Dislo\CDE\Validator;
 
-use Ixolit\Dislo\CDE\Validator\FormValidator;
-use Ixolit\Dislo\Client;
+use Ixolit\Dislo\CDE\CDEDisloClient;
 use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
 
 class DuplicateUserValidator implements FormValidator {
@@ -30,7 +29,7 @@ class DuplicateUserValidator implements FormValidator {
 	 * {@inheritdoc}
 	 */
 	public function isValid($value) {
-		$client = new Client();
+		$client = new CDEDisloClient();
 		if (!$value) {
 			return true;
 		}
