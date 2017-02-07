@@ -2,7 +2,8 @@
 
 namespace Ixolit\Dislo\CDE;
 
-use Ixolit\Dislo\CDE\Exceptions\GeoLookupFailedException;
+use Ixolit\CDE\CDEGeoLookupAPI;
+use Ixolit\CDE\Exceptions\GeoLookupFailedException;
 use Ixolit\Dislo\CDE\UnitTest\CDEUnitTest;
 
 class CDEGeoLookupAPITest extends CDEUnitTest {

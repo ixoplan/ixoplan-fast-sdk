@@ -5,7 +5,8 @@
 	"description": "Dislo SDK to be used within the CDE.",
 	"require": {
 		"ixolit/dislo-sdk": "dev-mmarchewa/no-cde",
-		"ixolit/cde-sdk": "dev-master"
+		"ixolit/cde-sdk": "dev-master",
+		"ixolit/dislo-cde-unittest": "dev-master"
 	},
 	"autoload": {
 		"psr-4": {

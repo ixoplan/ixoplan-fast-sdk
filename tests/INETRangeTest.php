@@ -2,11 +2,11 @@
 
 namespace Ixolit\Dislo\CDE;
 
-use Ixolit\Dislo\CDE\Exceptions\INETAddressTypeException;
+use Ixolit\CDE\Exceptions\INETAddressTypeException;
 use Ixolit\Dislo\CDE\UnitTest\CDEUnitTest;
-use Ixolit\Dislo\CDE\WorkingObjects\INET4Address;
-use Ixolit\Dislo\CDE\WorkingObjects\INET6Address;
-use Ixolit\Dislo\CDE\WorkingObjects\INETRange;
+use Ixolit\CDE\WorkingObjects\INET4Address;
+use Ixolit\CDE\WorkingObjects\INET6Address;
+use Ixolit\CDE\WorkingObjects\INETRange;
 
 /**
  * This class was ported from the Opsbears Foundation library with authorization.
