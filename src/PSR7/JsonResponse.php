@@ -2,13 +2,13 @@
 
 namespace Ixolit\Dislo\CDE\PSR7;
 
-
+use Ixolit\CDE\PSR7\Response;
 use Ixolit\Dislo\WorkingObjects\WorkingObject;
 
 /**
  * Class JsonResponse
  *
- * @package Ixolit\Dislo\CDE\PSR7
+ * @package Ixolit\CDE\PSR7
  */
 class JsonResponse extends Response {
 

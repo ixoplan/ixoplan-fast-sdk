@@ -1,9 +1,8 @@
 <?php
 
-// TODO: dislo
-
 namespace Ixolit\Dislo\CDE\Validator;
 
+use Ixolit\CDE\Validator\FormValidator;
 use Ixolit\Dislo\CDE\CDEDisloClient;
 use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
 

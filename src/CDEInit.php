@@ -2,9 +2,7 @@
 
 namespace Ixolit\Dislo\CDE;
 
-use Ixolit\Dislo\CDE\Controller\ControllerLogic;
-
-class CDEInit {
+class CDEInit extends \Ixolit\CDE\CDEInit {
 	public static function execute() {
 		global $cdeToolbar;
 
@@ -17,12 +15,6 @@ class CDEInit {
 			]
 		);
 
-		$controllerLogic = new ControllerLogic(
-			CDE::getRequestAPI(),
-			CDE::getResponseAPI(),
-			CDE::getFilesystemAPI()
-		);
-
-		$controllerLogic->execute();
+		parent::execute();
 	}
 }

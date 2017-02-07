@@ -1,10 +1,9 @@
 <?php
 
-// TODO: dislo
-
 namespace Ixolit\Dislo\CDE;
 
-use Ixolit\Dislo\CDE\Exceptions\KVSKeyNotFoundException;
+use Ixolit\CDE\CDE;
+use Ixolit\CDE\Exceptions\KVSKeyNotFoundException;
 use Ixolit\Dislo\CDE\Request\CDERequestClient;
 use Ixolit\Dislo\Client;
 use Ixolit\Dislo\Exceptions\ObjectNotFoundException;

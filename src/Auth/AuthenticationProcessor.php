@@ -1,14 +1,12 @@
 <?php
 
-// TODO: dislo
-
 namespace Ixolit\Dislo\CDE\Auth;
 
-use Ixolit\Dislo\CDE\CDECookieCache;
+use Ixolit\CDE\CDECookieCache;
+use Ixolit\CDE\Exceptions\CookieNotSetException;
+use Ixolit\CDE\Interfaces\RequestAPI;
+use Ixolit\CDE\Interfaces\ResponseAPI;
 use Ixolit\Dislo\CDE\CDEDisloClient;
-use Ixolit\Dislo\CDE\Exceptions\CookieNotSetException;
-use Ixolit\Dislo\CDE\Interfaces\RequestAPI;
-use Ixolit\Dislo\CDE\Interfaces\ResponseAPI;
 use Ixolit\Dislo\Exceptions\AuthenticationException;
 use Ixolit\Dislo\Exceptions\AuthenticationInvalidCredentialsException;
 use Ixolit\Dislo\Exceptions\AuthenticationRateLimitedException;

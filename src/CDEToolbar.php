@@ -2,9 +2,9 @@
 
 namespace Ixolit\Dislo\CDE;
 
-use Ixolit\Dislo\CDE\Interfaces\FilesystemAPI;
-use Ixolit\Dislo\CDE\Interfaces\RequestAPI;
-use Ixolit\Dislo\CDE\Interfaces\ResponseAPI;
+use Ixolit\CDE\Interfaces\FilesystemAPI;
+use Ixolit\CDE\Interfaces\RequestAPI;
+use Ixolit\CDE\Interfaces\ResponseAPI;
 use Ixolit\Dislo\CDE\UnitTest\CDETestRunner;
 
 class CDEToolbar {

@@ -1,7 +1,5 @@
 <?php
 
-// TODO: dislo
-
 namespace Ixolit\Dislo\CDE\Request;
 
 use Ixolit\Dislo\Request\InvalidResponseData;
