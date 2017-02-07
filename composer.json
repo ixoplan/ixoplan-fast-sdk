@@ -6,7 +6,7 @@
 	"require": {
 		"ixolit/dislo-sdk": "dev-mmarchewa/no-cde",
 		"ixolit/cde-sdk": "dev-master",
-		"ixolit/dislo-cde-unittest": "dev-master"
+		"ixolit/dislo-cde-unittest": "dev-mmarchewa/cde-sdk-separation"
 	},
 	"autoload": {
 		"psr-4": {
