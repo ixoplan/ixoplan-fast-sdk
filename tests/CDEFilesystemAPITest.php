@@ -4,8 +4,8 @@ namespace Ixolit\Dislo\CDE;
 
 use Ixolit\CDE\CDEFilesystemAPI;
 use Ixolit\CDE\Exceptions\FileNotFoundException;
-use Ixolit\Dislo\CDE\UnitTest\CDEUnitTest;
 use Ixolit\CDE\WorkingObjects\FilesystemEntry;
+use Ixolit\Dislo\CDE\UnitTest\CDEUnitTest;
 
 class CDEFilesystemAPITest extends CDEUnitTest {
 	public function testExists() {
