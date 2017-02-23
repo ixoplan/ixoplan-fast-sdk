@@ -63,7 +63,11 @@ class AuthenticationProcessor {
 			$this->tokenTimeout,
 			'{}'
 		);
-		CDECookieCache::getInstance()->write(self::COOKIE_NAME_AUTH_TOKEN, $authenticationResponse->getAuthToken());
+		CDECookieCache::getInstance()->write(
+			self::COOKIE_NAME_AUTH_TOKEN,
+			$authenticationResponse->getAuthToken(),
+			$this->tokenTimeout
+		);
 		return $authenticationResponse->getAuthToken();
 	}
 
