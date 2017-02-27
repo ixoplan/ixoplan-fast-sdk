@@ -8,6 +8,9 @@
 		"ixolit/cde-sdk": "dev-master",
 		"ixolit/dislo-cde-unittest": "dev-mmarchewa/cde-sdk-separation"
 	},
+	"provide": {
+		"ixolit/dislo-sdk-http": "1.0.0"
+	},
 	"autoload": {
 		"psr-4": {
 			"Ixolit\\Dislo\\CDE\\": "./src"
