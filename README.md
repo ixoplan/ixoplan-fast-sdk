@@ -23,4 +23,4 @@ This SDK provides `\Ixolit\Dislo\CDE\CDEDisloClient`, an extension that defaults
 
     $apiClient = new CDEDisloClient();
 
-For available API calls please refer to the [dislo-sdk](https://github.com/Ixolit/dislo-sdk).  
+For available API calls please refer to the [dislo-sdk](https://github.com/Ixolit/dislo-sdk).
