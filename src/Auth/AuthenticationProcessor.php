@@ -157,9 +157,13 @@ class AuthenticationProcessor {
 
 			return $authToken;
 		} catch (ObjectNotFoundException $e) {
-			throw new AuthenticationRequiredException();
+
 		} catch (InvalidTokenException $e) {
-			throw new AuthenticationRequiredException();
+
 		}
+
+		CDECookieCache::getInstance()->delete(self::COOKIE_NAME_AUTH_TOKEN);
+
+		throw new AuthenticationRequiredException();
 	}
 }
