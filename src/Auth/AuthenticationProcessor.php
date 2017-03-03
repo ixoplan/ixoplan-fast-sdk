@@ -13,6 +13,11 @@ use Ixolit\Dislo\Exceptions\AuthenticationRateLimitedException;
 use Ixolit\Dislo\Exceptions\InvalidTokenException;
 use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
 
+/**
+ * Helper for user authentication and verification. Stores the authentication token in a cookie.
+ * The default mode uses the maximum token lifetime and renews the cookie frequently ("stay logged in").
+ * The alternative volatile mode uses a short token lifetime and a session cookie.
+ */
 class AuthenticationProcessor {
 
 	const COOKIE_NAME_AUTH_TOKEN = 'auth-token';
@@ -48,10 +53,6 @@ class AuthenticationProcessor {
 	private $tokenTimeoutVolatile;
 
 	/**
-	 * Helper for user authentication and verification. Stores the authentication token in a cookie.
-	 * The default mode uses the maximum token lifetime and renews the cookie frequently ("stay logged in").
-	 * The alternative volatile mode uses a short token lifetime and a session cookie.
-	 *
 	 * @param RequestAPI  $requestApi
 	 * @param ResponseAPI $responseApi
 	 * @param int         $tokenTimeoutLongterm
@@ -103,67 +104,68 @@ class AuthenticationProcessor {
 	}
 
 	/**
-	 * Invalidate the current authentication token.
+	 * Invalidate an authentication token, either given or read from cookie, remove the cookie
+	 *
+	 * @param string|null $authToken
 	 */
-	public function deauthenticate() {
-		try {
-			$authToken = $this->extendToken();
+	public function deauthenticate($authToken = null) {
+
+		// fallback to cookie
+		if (!$authToken) {
+			$authToken = CDECookieCache::getInstance()->read($this->cookieName);
+		}
+
+		// delete cookie anyway
+		CDECookieCache::getInstance()->delete($this->cookieName);
+
+		if ($authToken) {
 			$apiClient = new CDEDisloClient();
 			try {
 				$apiClient->userDeauthenticate($authToken);
-
-				//delete auth cookie
-				CDECookieCache::getInstance()->delete($this->cookieName);
 			} catch (ObjectNotFoundException $e) {
 			}
-		} catch (AuthenticationRequiredException $e) {
 		}
 	}
 
 	/**
-	 * Checks and extends a token from cookie.
+	 * Check and extend an authentication token, either given or read from cookie, remove invalid cookie
 	 *
-	 * @param null $authToken
+	 * @param string|null $authToken
 	 *
 	 * @return string
 	 *
 	 * @throws AuthenticationRequiredException
 	 */
 	public function extendToken($authToken = null) {
-		// read from cookie
+
+		// fallback to cookie
 		if (!$authToken) {
+			$authToken = CDECookieCache::getInstance()->read($this->cookieName);
+		}
+
+		if ($authToken) {
+			$apiClient = new CDEDisloClient();
 			try {
-				$authToken = CDECookieCache::getInstance()->read($this->cookieName);
-				if (empty($authToken)) {
-					CDECookieCache::getInstance()->delete($this->cookieName);
-					throw new AuthenticationRequiredException();
+				// verify and extend the token
+				$extendResponse = $apiClient->userExtendToken($authToken, $this->requestApi->getRemoteAddress()->__toString());
+				$authToken = $extendResponse->getAuthToken()->getToken();
+				$metaInfo = json_decode($extendResponse->getAuthToken()->getMetaInfo(), true);
+
+				// update auth cookie if not volatile
+				if (!(isset($metaInfo[self::KEY_VOLATILE]) && $metaInfo[self::KEY_VOLATILE])) {
+					// TODO: retrieve expiry date from token?
+					CDECookieCache::getInstance()->write($this->cookieName, $authToken, $this->tokenTimeoutLongterm);
 				}
-			} catch (CookieNotSetException $e) {
-				throw new AuthenticationRequiredException();
+
+				return $authToken;
+
+			} catch (ObjectNotFoundException $e) {
+			} catch (InvalidTokenException $e) {
 			}
 		}
-		$apiClient = new CDEDisloClient();
-		try {
-			// verify and extend the token
-			$extendResponse = $apiClient->userExtendToken($authToken, $this->requestApi->getRemoteAddress()->__toString());
-			$authToken = $extendResponse->getAuthToken()->getToken();
-			$metaInfo = json_decode($extendResponse->getAuthToken()->getMetaInfo(), true);
 
-			// update auth cookie if not volatile
-			if (!(isset($metaInfo[self::KEY_VOLATILE]) && $metaInfo[self::KEY_VOLATILE])) {
-				// TODO: retrieve expiry date from token?
-				CDECookieCache::getInstance()->write($this->cookieName, $authToken, $this->tokenTimeoutLongterm);
-			}
-
-			return $authToken;
-		} catch (ObjectNotFoundException $e) {
-
-		} catch (InvalidTokenException $e) {
-
-		}
-
-		CDECookieCache::getInstance()->delete(self::COOKIE_NAME_AUTH_TOKEN);
-
+		// something is wrong with the token
+		CDECookieCache::getInstance()->delete($this->cookieName);
 		throw new AuthenticationRequiredException();
 	}
 }
