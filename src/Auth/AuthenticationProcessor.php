@@ -162,7 +162,13 @@ class AuthenticationProcessor {
 				// update auth cookie if not volatile
 				if (!(isset($metaInfo[self::KEY_VOLATILE]) && $metaInfo[self::KEY_VOLATILE])) {
 					// TODO: retrieve expiry date from token?
-					CDECookieCache::getInstance()->write($this->cookieName, $authToken, $this->tokenTimeoutLongterm);
+					CDECookieCache::getInstance()->write(
+						$this->cookieName,
+						$authToken,
+						$this->tokenTimeoutLongterm,
+						null,
+						$this->cookieDomain
+					);
 				}
 
 				return $authToken;
