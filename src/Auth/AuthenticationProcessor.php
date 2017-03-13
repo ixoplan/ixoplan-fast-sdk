@@ -3,7 +3,6 @@
 namespace Ixolit\Dislo\CDE\Auth;
 
 use Ixolit\CDE\CDECookieCache;
-use Ixolit\CDE\Exceptions\CookieNotSetException;
 use Ixolit\CDE\Interfaces\RequestAPI;
 use Ixolit\CDE\Interfaces\ResponseAPI;
 use Ixolit\Dislo\CDE\CDEDisloClient;
@@ -43,6 +42,11 @@ class AuthenticationProcessor {
 	private $cookieName;
 
 	/**
+	 * @var string
+	 */
+	private $cookieDomain;
+
+	/**
 	 * @var int
 	 */
 	private $tokenTimeoutLongterm;
@@ -64,13 +68,15 @@ class AuthenticationProcessor {
 		ResponseAPI $responseApi,
 		$tokenTimeoutLongterm = self::TOKEN_TIMEOUT_LONGTERM,
 		$tokenTimeoutVolatile = self::TOKEN_TIMEOUT_VOLATILE,
-		$cookieName = self::COOKIE_NAME_AUTH_TOKEN
+		$cookieName = self::COOKIE_NAME_AUTH_TOKEN,
+		$cookieDomain = null
 	) {
 		$this->requestApi  = $requestApi;
 		$this->responseApi = $responseApi;
 		$this->tokenTimeoutLongterm = $tokenTimeoutLongterm;
 		$this->tokenTimeoutVolatile = $tokenTimeoutVolatile;
 		$this->cookieName = $cookieName;
+		$this->cookieDomain = $cookieDomain;
 	}
 
 	/**
@@ -98,7 +104,9 @@ class AuthenticationProcessor {
 		CDECookieCache::getInstance()->write(
 			$this->cookieName,
 			$authenticationResponse->getAuthToken(),
-			$volatile ? 0 : $this->tokenTimeoutLongterm
+			$volatile ? 0 : $this->tokenTimeoutLongterm,
+			null,
+			$this->cookieDomain
 		);
 		return $authenticationResponse->getAuthToken();
 	}
