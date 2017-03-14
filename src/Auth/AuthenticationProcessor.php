@@ -124,7 +124,7 @@ class AuthenticationProcessor {
 		}
 
 		// delete cookie anyway
-		CDECookieCache::getInstance()->delete($this->cookieName);
+		CDECookieCache::getInstance()->delete($this->cookieName, null, $this->cookieDomain);
 
 		if ($authToken) {
 			$apiClient = new CDEDisloClient();
@@ -179,7 +179,7 @@ class AuthenticationProcessor {
 		}
 
 		// something is wrong with the token
-		CDECookieCache::getInstance()->delete($this->cookieName);
+		CDECookieCache::getInstance()->delete($this->cookieName, null, $this->cookieDomain);
 		throw new AuthenticationRequiredException();
 	}
 }
