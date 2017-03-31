@@ -62,6 +62,7 @@ class AuthenticationProcessor {
 	 * @param int         $tokenTimeoutLongterm
 	 * @param int         $tokenTimeoutVolatile
 	 * @param string      $cookieName
+	 * @param null        $cookieDomain
 	 */
 	public function __construct(
 		RequestAPI $requestApi,
