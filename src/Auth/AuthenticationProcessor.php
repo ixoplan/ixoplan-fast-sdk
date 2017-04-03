@@ -85,13 +85,8 @@ class AuthenticationProcessor {
 	 * @throws AuthenticationInvalidCredentialsException
 	 * @throws AuthenticationRateLimitedException
 	 */
-<<<<<<< Updated upstream
-	public function authenticate($uniqueUserField, $password, $volatile = false) {
-		$apiClient = new Client();
-=======
 	public function authenticate($uniqueUserField, $password, $volatile = false, $ignoreRateLimit = false) {
-		$apiClient = new CDEDisloClient();
->>>>>>> Stashed changes
+		$apiClient = new Client();
 		$authenticationResponse = $apiClient->userAuthenticate(
 			$uniqueUserField,
 			$password,
