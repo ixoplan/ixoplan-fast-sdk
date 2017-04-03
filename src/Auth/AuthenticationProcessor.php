@@ -77,22 +77,28 @@ class AuthenticationProcessor {
 	 *
 	 * @param string $uniqueUserField
 	 * @param string $password
-	 * @param bool $volatile If true, use short token lifetime on server and create session cookie on client
+	 * @param bool   $volatile If true, use short token lifetime on server and create session cookie on client
+	 * @param bool   $ignoreRateLimit
 	 *
 	 * @return string
-	 *
-	 * @throws AuthenticationRateLimitedException
-	 * @throws AuthenticationInvalidCredentialsException
 	 * @throws AuthenticationException
+	 * @throws AuthenticationInvalidCredentialsException
+	 * @throws AuthenticationRateLimitedException
 	 */
+<<<<<<< Updated upstream
 	public function authenticate($uniqueUserField, $password, $volatile = false) {
 		$apiClient = new Client();
+=======
+	public function authenticate($uniqueUserField, $password, $volatile = false, $ignoreRateLimit = false) {
+		$apiClient = new CDEDisloClient();
+>>>>>>> Stashed changes
 		$authenticationResponse = $apiClient->userAuthenticate(
 			$uniqueUserField,
 			$password,
 			$this->requestApi->getRemoteAddress()->__toString(),
 			$volatile ? $this->tokenTimeoutVolatile : $this->tokenTimeoutLongterm,
-			$volatile ? json_encode([self::KEY_VOLATILE => 1]) : '{}'
+			$volatile ? json_encode([self::KEY_VOLATILE => 1]) : '{}',
+			$ignoreRateLimit
 		);
 		CDECookieCache::getInstance()->write(
 			$this->cookieName,
