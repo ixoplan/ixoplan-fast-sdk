@@ -64,7 +64,11 @@ class CDEDisloClient extends Client {
 			return parent::packagesList($serviceIdentifier);
 		} else {
 			try {
-				return PackagesListResponse::fromResponse(CDE::getKVSAPI()->get('apiPackages'));
+				return PackagesListResponse::fromResponse(
+					[
+						'packages' => CDE::getKVSAPI()->get('apiPackages')
+					]
+				);
 			} catch (KVSKeyNotFoundException $e) {
 				return parent::packagesList($serviceIdentifier);
 			}
