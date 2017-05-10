@@ -6,11 +6,14 @@ use Ixolit\CDE\CDECookieCache;
 use Ixolit\CDE\Interfaces\RequestAPI;
 use Ixolit\CDE\Interfaces\ResponseAPI;
 use Ixolit\Dislo\CDE\CDEDisloClient;
+use Ixolit\Dislo\Client;
 use Ixolit\Dislo\Exceptions\AuthenticationException;
 use Ixolit\Dislo\Exceptions\AuthenticationInvalidCredentialsException;
 use Ixolit\Dislo\Exceptions\AuthenticationRateLimitedException;
 use Ixolit\Dislo\Exceptions\InvalidTokenException;
 use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
+use Ixolit\Dislo\WorkingObjects\AuthToken;
+use Ixolit\Dislo\WorkingObjects\User;
 
 /**
  * Helper for user authentication and verification. Stores the authentication token in a cookie.
@@ -56,21 +59,28 @@ class AuthenticationProcessor {
 	 */
 	private $tokenTimeoutVolatile;
 
-	/**
-	 * @param RequestAPI  $requestApi
-	 * @param ResponseAPI $responseApi
-	 * @param int         $tokenTimeoutLongterm
-	 * @param int         $tokenTimeoutVolatile
-	 * @param string      $cookieName
-	 * @param null        $cookieDomain
-	 */
+    /**
+     * @var Client
+     */
+	private $client;
+
+    /**
+     * @param RequestAPI  $requestApi
+     * @param ResponseAPI $responseApi
+     * @param int         $tokenTimeoutLongterm
+     * @param int         $tokenTimeoutVolatile
+     * @param string      $cookieName
+     * @param string|null $cookieDomain
+     * @param Client|null $client
+     */
 	public function __construct(
 		RequestAPI $requestApi,
 		ResponseAPI $responseApi,
 		$tokenTimeoutLongterm = self::TOKEN_TIMEOUT_LONGTERM,
 		$tokenTimeoutVolatile = self::TOKEN_TIMEOUT_VOLATILE,
 		$cookieName = self::COOKIE_NAME_AUTH_TOKEN,
-		$cookieDomain = null
+		$cookieDomain = null,
+        Client $client = null
 	) {
 		$this->requestApi  = $requestApi;
 		$this->responseApi = $responseApi;
@@ -78,7 +88,19 @@ class AuthenticationProcessor {
 		$this->tokenTimeoutVolatile = $tokenTimeoutVolatile;
 		$this->cookieName = $cookieName;
 		$this->cookieDomain = $cookieDomain;
+		$this->client = $client;
 	}
+
+    /**
+     * @return Client
+     */
+	protected function getClient() {
+	    if (!isset($this->client)) {
+	        $this->client = new CDEDisloClient();
+        }
+
+        return $this->client;
+    }
 
 	/**
 	 * Authenticate a user. If successful, the authentication token is set into a cookie and also returned.
@@ -94,8 +116,7 @@ class AuthenticationProcessor {
 	 * @throws AuthenticationRateLimitedException
 	 */
 	public function authenticate($uniqueUserField, $password, $volatile = false, $ignoreRateLimit = false) {
-		$apiClient = new CDEDisloClient();
-		$authenticationResponse = $apiClient->userAuthenticate(
+		$authenticationResponse = $this->getClient()->userAuthenticate(
 			$uniqueUserField,
 			$password,
 			$this->requestApi->getRemoteAddress()->__toString(),
@@ -129,9 +150,8 @@ class AuthenticationProcessor {
 		CDECookieCache::getInstance()->delete($this->cookieName, null, $this->cookieDomain);
 
 		if ($authToken) {
-			$apiClient = new CDEDisloClient();
 			try {
-				$apiClient->userDeauthenticate($authToken);
+				$this->getClient()->userDeauthenticate($authToken);
 			} catch (ObjectNotFoundException $e) {
 			}
 		}
@@ -154,24 +174,15 @@ class AuthenticationProcessor {
 		}
 
 		if ($authToken) {
-			$apiClient = new CDEDisloClient();
 			try {
 				// verify and extend the token
-				$extendResponse = $apiClient->userExtendToken($authToken, $this->requestApi->getRemoteAddress()->__toString());
+				$extendResponse = $this->getClient()->userExtendToken(
+				    $authToken,
+                    $this->requestApi->getRemoteAddress()->__toString()
+                );
 				$authToken = $extendResponse->getAuthToken()->getToken();
-				$metaInfo = json_decode($extendResponse->getAuthToken()->getMetaInfo(), true);
 
-				// update auth cookie if not volatile
-				if (!(isset($metaInfo[self::KEY_VOLATILE]) && $metaInfo[self::KEY_VOLATILE])) {
-					// TODO: retrieve expiry date from token?
-					CDECookieCache::getInstance()->write(
-						$this->cookieName,
-						$authToken,
-						$this->tokenTimeoutLongterm,
-						null,
-						$this->cookieDomain
-					);
-				}
+				$this->updateAuthTokenCookie($extendResponse->getAuthToken());
 
 				return $authToken;
 
@@ -184,4 +195,59 @@ class AuthenticationProcessor {
 		CDECookieCache::getInstance()->delete($this->cookieName, null, $this->cookieDomain);
 		throw new AuthenticationRequiredException();
 	}
+
+    /**
+     * @param string|null $authToken
+     *
+     * @return User
+     *
+     * @throws AuthenticationRequiredException
+     */
+	public function getAuthenticatedUser($authToken = null) {
+	    if (!$authToken) {
+	        $authToken = CDECookieCache::getInstance()->read($this->cookieName);
+        }
+
+        if ($authToken) {
+	        try {
+                $user = $this->getClient()->userGet($authToken)->getUser();
+
+                if (!$user->getAuthToken()) {
+                    throw new AuthenticationRequiredException();
+                }
+
+                $this->updateAuthTokenCookie($user->getAuthToken());
+
+                return $user;
+            } catch (ObjectNotFoundException $e) {
+            } catch (InvalidTokenException $e) {
+            }
+        }
+
+        CDECookieCache::getInstance()->delete($this->cookieName, null, $this->cookieDomain);
+	    throw new AuthenticationRequiredException();
+    }
+
+    /**
+     * @param AuthToken $authToken
+     *
+     * @return $this
+     */
+    protected function updateAuthTokenCookie(AuthToken $authToken) {
+        $authTokenMetaInfo = \json_decode($authToken->getMetaInfo(), true);
+
+        // update auth cookie if not volatile
+        if (!(isset($authTokenMetaInfo[self::KEY_VOLATILE]) && $authTokenMetaInfo[self::KEY_VOLATILE])) {
+            // TODO: retrieve expiry date from token?
+            CDECookieCache::getInstance()->write(
+                $this->cookieName,
+                $authToken->getToken(),
+                $this->tokenTimeoutLongterm,
+                null,
+                $this->cookieDomain
+            );
+        }
+
+        return $this;
+    }
 }
