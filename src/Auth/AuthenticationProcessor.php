@@ -102,6 +102,48 @@ class AuthenticationProcessor {
         return $this->client;
     }
 
+    /**
+     * @return RequestAPI
+     */
+    protected function getRequestApi() {
+	    return $this->requestApi;
+    }
+
+    /**
+     * @return ResponseAPI
+     */
+    protected function getResponseApi() {
+        return $this->responseApi;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getCookieName() {
+        return $this->cookieName;
+    }
+
+    /**
+     * @return null|string
+     */
+    protected function getCookieDomain() {
+        return $this->cookieDomain;
+    }
+
+    /**
+     * @return int
+     */
+    protected function getTokenTimeoutLongTerm() {
+        return $this->tokenTimeoutLongterm;
+    }
+
+    /**
+     * @return int
+     */
+    protected function getTokenTimeoutVolatile() {
+        return $this->tokenTimeoutVolatile;
+    }
+
 	/**
 	 * Authenticate a user. If successful, the authentication token is set into a cookie and also returned.
 	 *
@@ -119,17 +161,17 @@ class AuthenticationProcessor {
 		$authenticationResponse = $this->getClient()->userAuthenticate(
 			$uniqueUserField,
 			$password,
-			$this->requestApi->getRemoteAddress()->__toString(),
-			$volatile ? $this->tokenTimeoutVolatile : $this->tokenTimeoutLongterm,
+			$this->getRequestApi()->getRemoteAddress()->__toString(),
+			$volatile ? $this->getTokenTimeoutVolatile() : $this->getTokenTimeoutLongTerm(),
 			$volatile ? json_encode([self::KEY_VOLATILE => 1]) : '{}',
 			$ignoreRateLimit
 		);
 		CDECookieCache::getInstance()->write(
-			$this->cookieName,
+			$this->getCookieName(),
 			$authenticationResponse->getAuthToken(),
-			$volatile ? 0 : $this->tokenTimeoutLongterm,
+			$volatile ? 0 : $this->getTokenTimeoutLongTerm(),
 			null,
-			$this->cookieDomain
+			$this->getCookieDomain()
 		);
 		return $authenticationResponse->getAuthToken();
 	}
@@ -143,11 +185,11 @@ class AuthenticationProcessor {
 
 		// fallback to cookie
 		if (!$authToken) {
-			$authToken = CDECookieCache::getInstance()->read($this->cookieName);
+			$authToken = CDECookieCache::getInstance()->read($this->getCookieName());
 		}
 
 		// delete cookie anyway
-		CDECookieCache::getInstance()->delete($this->cookieName, null, $this->cookieDomain);
+		CDECookieCache::getInstance()->delete($this->getCookieName(), null, $this->getCookieDomain());
 
 		if ($authToken) {
 			try {
@@ -170,7 +212,7 @@ class AuthenticationProcessor {
 
 		// fallback to cookie
 		if (!$authToken) {
-			$authToken = CDECookieCache::getInstance()->read($this->cookieName);
+			$authToken = CDECookieCache::getInstance()->read($this->getCookieName());
 		}
 
 		if ($authToken) {
@@ -178,7 +220,7 @@ class AuthenticationProcessor {
 				// verify and extend the token
 				$extendResponse = $this->getClient()->userExtendToken(
 				    $authToken,
-                    $this->requestApi->getRemoteAddress()->__toString()
+                    $this->getRequestApi()->getRemoteAddress()->__toString()
                 );
 				$authToken = $extendResponse->getAuthToken()->getToken();
 
@@ -192,7 +234,7 @@ class AuthenticationProcessor {
 		}
 
 		// something is wrong with the token
-		CDECookieCache::getInstance()->delete($this->cookieName, null, $this->cookieDomain);
+		CDECookieCache::getInstance()->delete($this->getCookieName(), null, $this->getCookieDomain());
 		throw new AuthenticationRequiredException();
 	}
 
@@ -205,16 +247,15 @@ class AuthenticationProcessor {
      */
 	public function getAuthenticatedUser($authToken = null) {
 	    if (!$authToken) {
-	        $authToken = CDECookieCache::getInstance()->read($this->cookieName);
+	        $authToken = CDECookieCache::getInstance()->read($this->getCookieName());
         }
 
         if ($authToken) {
 	        try {
-                $user = $this->getClient()->userGet($authToken)->getUser();
-
-                if (!$user->getAuthToken()) {
-                    throw new AuthenticationRequiredException();
-                }
+                $user = $this->getClient()->userGetAuthenticated(
+                    $authToken,
+                    $this->getRequestApi()->getRemoteAddress()->__toString()
+                )->getUser();
 
                 $this->updateAuthTokenCookie($user->getAuthToken());
 
@@ -224,7 +265,7 @@ class AuthenticationProcessor {
             }
         }
 
-        CDECookieCache::getInstance()->delete($this->cookieName, null, $this->cookieDomain);
+        CDECookieCache::getInstance()->delete($this->getCookieName(), null, $this->getCookieDomain());
 	    throw new AuthenticationRequiredException();
     }
 
@@ -240,11 +281,11 @@ class AuthenticationProcessor {
         if (!(isset($authTokenMetaInfo[self::KEY_VOLATILE]) && $authTokenMetaInfo[self::KEY_VOLATILE])) {
             // TODO: retrieve expiry date from token?
             CDECookieCache::getInstance()->write(
-                $this->cookieName,
+                $this->getCookieName(),
                 $authToken->getToken(),
-                $this->tokenTimeoutLongterm,
+                $this->getTokenTimeoutLongTerm(),
                 null,
-                $this->cookieDomain
+                $this->getCookieDomain()
             );
         }
 
