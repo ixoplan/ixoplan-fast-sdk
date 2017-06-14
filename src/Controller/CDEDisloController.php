@@ -90,10 +90,12 @@ class CDEDisloController extends CDEController {
      */
     protected function getUserContext() {
         if (!isset($this->authenticatedUserContext)) {
-            $this->authenticatedUserContext = new UserContext(
-                $this->getClient(),
-                $this->getAuthenticationProcessor()->getAuthenticatedUser()
-            );
+            try {
+                $this->authenticatedUserContext = new UserContext(
+                    $this->getClient(),
+                    $this->getAuthenticationProcessor()->getAuthenticatedUser()
+                );
+            } catch (AuthenticationRequiredException $e) {}
         }
 
         return $this->authenticatedUserContext;
