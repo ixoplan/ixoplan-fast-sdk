@@ -105,7 +105,7 @@ class CDEDisloController extends CDEController {
      * @return User
      */
     protected function getUser() {
-        return $this->getUserContext()->getUser();
+        return $this->getUserContext() ? $this->getUserContext()->getUser() : null;
     }
 
 }
