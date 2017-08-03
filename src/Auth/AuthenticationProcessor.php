@@ -147,24 +147,31 @@ class AuthenticationProcessor {
 	/**
 	 * Authenticate a user. If successful, the authentication token is set into a cookie and also returned.
 	 *
-	 * @param string $uniqueUserField
-	 * @param string $password
-	 * @param bool   $volatile If true, use short token lifetime on server and create session cookie on client
-	 * @param bool   $ignoreRateLimit
+     * @param string      $uniqueUserField
+     * @param string      $password
+     * @param bool        $volatile If true, use short token lifetime on server and create session cookie on client
+     * @param bool        $ignoreRateLimit
+     * @param string|null $language
 	 *
 	 * @return string
 	 * @throws AuthenticationException
 	 * @throws AuthenticationInvalidCredentialsException
 	 * @throws AuthenticationRateLimitedException
 	 */
-	public function authenticate($uniqueUserField, $password, $volatile = false, $ignoreRateLimit = false) {
-		$authenticationResponse = $this->getClient()->userAuthenticate(
+	public function authenticate($uniqueUserField,
+                                 $password,
+                                 $volatile = false,
+                                 $ignoreRateLimit = false,
+                                 $language = null
+    ) {
+        $authenticationResponse = $this->getClient()->userAuthenticate(
 			$uniqueUserField,
 			$password,
 			$this->getRequestApi()->getRemoteAddress()->__toString(),
 			$volatile ? $this->getTokenTimeoutVolatile() : $this->getTokenTimeoutLongTerm(),
 			$volatile ? json_encode([self::KEY_VOLATILE => 1]) : '{}',
-			$ignoreRateLimit
+			$ignoreRateLimit,
+            $language
 		);
 		CDECookieCache::getInstance()->write(
 			$this->getCookieName(),
