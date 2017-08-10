@@ -9,7 +9,7 @@
 		"ixolit/dislo-cde-unittest": "^1.0.0"
 	},
 	"provide": {
-		"ixolit/dislo-sdk-http": "dev-beta"
+		"ixolit/dislo-sdk-http": "^1.0"
 	},
 	"autoload": {
 		"psr-4": {
