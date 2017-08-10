@@ -8,9 +8,6 @@
 		"ixolit/dislo-sdk": "^1.0.22",
 		"ixolit/dislo-cde-unittest": "^1.0.0"
 	},
-	"provide": {
-		"ixolit/dislo-sdk-http": "^1.0"
-	},
 	"autoload": {
 		"psr-4": {
 			"Ixolit\\Dislo\\CDE\\": "./src"
