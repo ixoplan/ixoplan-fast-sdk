@@ -72,6 +72,7 @@ class Page extends CDEPage {
 	}
 
 	protected function doPrepare() {
+		parent::doPrepare();
 		$this->doRedirects();
 	}
 
