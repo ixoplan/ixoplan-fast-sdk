@@ -91,8 +91,8 @@ class PageRedirectorRequest implements RedirectorRequestInterface {
 	/**
 	 * @inheritDoc
 	 */
-	public function getUserAgent() {
-		return $this->page->getRequestAPI()->getHeader('User-Agent');
+	public function getHeader($key) {
+		return $this->page->getRequestAPI()->getHeader($key);
 	}
 
 	/**
