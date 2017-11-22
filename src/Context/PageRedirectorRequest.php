@@ -4,6 +4,7 @@ namespace Ixolit\Dislo\CDE\Context;
 
 use Ixolit\CDE\Exceptions\GeoLookupFailedException;
 use Ixolit\Dislo\Redirector\Base\Cookie;
+use Ixolit\Dislo\Redirector\Base\Header;
 use Ixolit\Dislo\Redirector\Base\RedirectorRequestInterface;
 use Ixolit\Dislo\Redirector\Base\RequestParameter;
 
@@ -85,7 +86,13 @@ class PageRedirectorRequest implements RedirectorRequestInterface {
 	 * @inheritDoc
 	 */
 	public function getHeaders() {
-		return $this->page->getRequestAPI()->getHeaders();
+		$headers = [];
+		foreach ($this->page->getRequestAPI()->getHeaders() as $name => $value) {
+			$headers[] = (new Header())
+				->setName($name)
+				->setValue($value);
+		}
+		return $headers;
 	}
 
 	/**
