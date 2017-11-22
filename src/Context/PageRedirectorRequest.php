@@ -98,13 +98,6 @@ class PageRedirectorRequest implements RedirectorRequestInterface {
 	/**
 	 * @inheritDoc
 	 */
-	public function getHeader($key) {
-		return $this->page->getRequestAPI()->getHeader($key);
-	}
-
-	/**
-	 * @inheritDoc
-	 */
 	public function getIpBasedCountryCode() {
 		try {
 			$address = $this->page->getRequestAPI()->getRemoteAddress()->getAddress();
