@@ -7,6 +7,7 @@ use Ixolit\Dislo\Redirector\Base\Cookie;
 use Ixolit\Dislo\Redirector\Base\Header;
 use Ixolit\Dislo\Redirector\Base\RedirectorRequestInterface;
 use Ixolit\Dislo\Redirector\Base\RequestParameter;
+use Ixolit\Dislo\Redirector\Base\SessionVariable;
 
 class PageRedirectorRequest implements RedirectorRequestInterface {
 
@@ -100,6 +101,11 @@ class PageRedirectorRequest implements RedirectorRequestInterface {
 	 */
 	public function getSessionVariables() {
 		$variables = [];
+		foreach ($this->page->getTemporaryStorage()->getVariables() as $name => $value) {
+			$variables[] = (new SessionVariable())
+				->setName($name)
+				->setValue($value);
+		}
 		return $variables;
 	}
 
