@@ -8,6 +8,7 @@ use Ixolit\Dislo\CDE\Request\CDERequestClient;
 use Ixolit\Dislo\Client;
 use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
 use Ixolit\Dislo\Request\RequestClient;
+use Ixolit\Dislo\Response\MiscGetRedirectorConfigurationResponse;
 use Ixolit\Dislo\Response\PackageGetResponse;
 use Ixolit\Dislo\Response\PackagesListResponse;
 
@@ -49,7 +50,7 @@ class CDEDisloClient extends Client {
 
 	/**
 	 * Retrieve a list of all packages registered in the system. This version uses the CDE key-value store to make
-	 * package list ist retrieval faster.
+	 * package list retrieval faster.
 	 *
 	 * @param null|string $serviceIdentifier
 	 * @param bool        $cached Use key-value store cached packages list instead of fetching it from the API.
@@ -73,5 +74,29 @@ class CDEDisloClient extends Client {
 				return parent::packagesList($serviceIdentifier);
 			}
 		}
+	}
+
+	/**
+	 * Retrieve Dislo's redirector configuration. This version uses the CDE key-value store to make retrieval faster.
+	 *
+	 * @param bool $cached
+	 * @return \Ixolit\Dislo\Response\MiscGetRedirectorConfigurationResponse
+	 */
+	public function miscGetRedirectorConfiguration($cached = true) {
+
+		if (!$cached) {
+			return parent::miscGetRedirectorConfiguration();
+		}
+		else {
+			try {
+				return MiscGetRedirectorConfigurationResponse::fromData(
+					CDE::getKVSAPI()->get('redirectorData')
+				);
+			}
+			catch (KVSKeyNotFoundException $e) {
+				return parent::miscGetRedirectorConfiguration();
+			}
+		}
+
 	}
 }

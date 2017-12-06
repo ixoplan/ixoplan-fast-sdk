@@ -11,6 +11,7 @@ use Ixolit\Dislo\CDE\Auth\AuthenticationProcessor;
 use Ixolit\Dislo\CDE\Auth\AuthenticationRequiredException;
 use Ixolit\Dislo\Client;
 use Ixolit\Dislo\Context\UserContext;
+use Ixolit\Dislo\Exceptions\InvalidTokenException;
 use Ixolit\Dislo\WorkingObjects\User;
 
 /**
@@ -87,6 +88,8 @@ class CDEDisloController extends CDEController {
 
     /**
      * @return UserContext
+     * @throws InvalidTokenException
+     * @throws AuthenticationRequiredException
      */
     protected function getUserContext() {
         if (!isset($this->authenticatedUserContext)) {
