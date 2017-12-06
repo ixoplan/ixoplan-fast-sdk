@@ -4,7 +4,7 @@
 	"type": "library",
 	"description": "Dislo SDK to be used within the CDE.",
 	"require": {
-		"ixolit/cde-sdk": "^1.0.26",
+		"ixolit/cde-sdk": "^1.0.27",
 		"ixolit/dislo-sdk": "^1.0.27",
 		"ixolit/dislo-cde-unittest": "^1.0.0"
 	},
