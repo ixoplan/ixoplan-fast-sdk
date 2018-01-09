@@ -33,8 +33,11 @@ class CDEToolbar {
 		FilesystemAPI $filesystemAPI,
 		$unitTestDirectories = []
 	) {
-		$unitTestDirectories[] = '/vendor/ixolit/dislo-cde-sdk/tests/';
-		$unitTestDirectories[] = '/vendor/ixolit/dislo-sdk/tests/';
+
+	    $appDir = defined('APP_DIR') ? APP_DIR  : '/';
+
+		$unitTestDirectories[] = $appDir . 'vendor/ixolit/dislo-cde-sdk/tests/';
+		$unitTestDirectories[] = $appDir . 'vendor/ixolit/dislo-sdk/tests/';
 
 		if (\function_exists('previewInfo') && $previewInfo = previewInfo()) {
 			$this->previewInfo = $previewInfo;
@@ -86,7 +89,7 @@ class CDEToolbar {
 			$testRunner = new CDETestRunner($this->filesystemAPI, $this->unitTestDirectories);
 			$unitTests  = $testRunner->getUnitTests();
 
-			require(preg_replace('/^vfs\:/', '/', __DIR__ . '/../templates/toolbar/toolbar.php'));
+			require(preg_replace('/^vfs\:/', defined('APP_DIR') ? APP_DIR : '/', __DIR__ . '/../templates/toolbar/toolbar.php'));
 		}
 	}
 }
