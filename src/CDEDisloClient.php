@@ -2,16 +2,20 @@
 
 namespace Ixolit\Dislo\CDE;
 
-use Ixolit\CDE\CDE;
-use Ixolit\CDE\Exceptions\KVSKeyNotFoundException;
+use Ixolit\Dislo\CDE\Context\Page;
 use Ixolit\Dislo\CDE\Request\CDERequestClient;
 use Ixolit\Dislo\Client;
 use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
 use Ixolit\Dislo\Request\RequestClient;
-use Ixolit\Dislo\Response\MiscGetRedirectorConfigurationResponse;
 use Ixolit\Dislo\Response\PackageGetResponse;
-use Ixolit\Dislo\Response\PackagesListResponse;
 
+/**
+ * Class CDEDisloClient
+ *
+ * @package Ixolit\Dislo\CDE
+ *
+ * @deprecated this client is not in use anymore
+ */
 class CDEDisloClient extends Client {
 
 	/**
@@ -22,10 +26,19 @@ class CDEDisloClient extends Client {
 	 */
 	public function __construct(RequestClient $requestClient = null, $forceTokenMode = true) {
 		if (!isset($requestClient) && \function_exists('\\apiCall')) {
-			$requestClient = new CDERequestClient();
+			$requestClient = new CDERequestClient(Page::kvsAPI(), false);
 		}
 		parent::__construct($requestClient, $forceTokenMode);
 	}
+
+    /**
+     * @param bool $cached
+     *
+     * @return CDERequestClient
+     */
+	private function createRequestClient($cached) {
+	    return new CDERequestClient(Page::kvsAPI(), $cached);
+    }
 
 	/**
 	 * @param string $packageIdentifier
@@ -35,17 +48,10 @@ class CDEDisloClient extends Client {
 	 * @return PackageGetResponse
 	 * @throws ObjectNotFoundException
 	 */
-	public function packageGet(
-		$packageIdentifier,
-		$cached = true
-	) {
-		$packages = $this->packagesList(null, $cached)->getPackages();
-		foreach ($packages as $package) {
-			if ($package->getPackageIdentifier() == $packageIdentifier) {
-				return new PackageGetResponse($package);
-			}
-		}
-		throw new ObjectNotFoundException('package with ID ' . $packageIdentifier);
+	public function packageGet($packageIdentifier, $cached = true) {
+	    $this->setRequestClient($this->createRequestClient($cached));
+
+	    return parent::packageGet($packageIdentifier);
 	}
 
 	/**
@@ -57,23 +63,10 @@ class CDEDisloClient extends Client {
 	 *
 	 * @return \Ixolit\Dislo\Response\PackagesListResponse
 	 */
-	public function packagesList(
-		$serviceIdentifier = null,
-		$cached = false
-	) {
-		if (!$cached) {
-			return parent::packagesList($serviceIdentifier);
-		} else {
-			try {
-				return PackagesListResponse::fromResponse(
-					[
-						'packages' => CDE::getKVSAPI()->get('apiPackages')
-					]
-				);
-			} catch (KVSKeyNotFoundException $e) {
-				return parent::packagesList($serviceIdentifier);
-			}
-		}
+	public function packagesList($serviceIdentifier = null, $cached = false) {
+        $this->setRequestClient($this->createRequestClient($cached));
+
+        return parent::packagesList($serviceIdentifier);
 	}
 
 	/**
@@ -83,20 +76,8 @@ class CDEDisloClient extends Client {
 	 * @return \Ixolit\Dislo\Response\MiscGetRedirectorConfigurationResponse
 	 */
 	public function miscGetRedirectorConfiguration($cached = true) {
+	    $this->setRequestClient($this->createRequestClient($cached));
 
-		if (!$cached) {
-			return parent::miscGetRedirectorConfiguration();
-		}
-		else {
-			try {
-				return MiscGetRedirectorConfigurationResponse::fromData(
-					CDE::getKVSAPI()->get('redirectorData')
-				);
-			}
-			catch (KVSKeyNotFoundException $e) {
-				return parent::miscGetRedirectorConfiguration();
-			}
-		}
-
+	    return parent::miscGetRedirectorConfiguration();
 	}
 }
