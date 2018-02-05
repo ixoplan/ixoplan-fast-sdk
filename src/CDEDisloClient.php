@@ -2,7 +2,6 @@
 
 namespace Ixolit\Dislo\CDE;
 
-use Ixolit\CDE\CDE;
 use Ixolit\CDE\Exceptions\KVSKeyNotFoundException;
 use Ixolit\Dislo\CDE\Request\CDERequestClient;
 use Ixolit\Dislo\Client;
