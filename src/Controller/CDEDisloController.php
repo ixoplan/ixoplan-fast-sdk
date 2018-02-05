@@ -11,6 +11,8 @@ use Ixolit\Dislo\CDE\Auth\AuthenticationProcessor;
 use Ixolit\Dislo\CDE\Auth\AuthenticationRequiredException;
 use Ixolit\Dislo\Client;
 use Ixolit\Dislo\Context\UserContext;
+use Ixolit\Dislo\Exceptions\InvalidTokenException;
+use Ixolit\Dislo\WorkingObjects\CachedObject;
 use Ixolit\Dislo\WorkingObjects\User;
 
 /**
@@ -26,11 +28,8 @@ class CDEDisloController extends CDEController {
     /** @var AuthenticationProcessor */
     private $authenticationProcessor;
 
-    /** @var string */
-    private $authToken;
-
-    /** @var UserContext */
-    private $authenticatedUserContext;
+    /** @var CachedObject */
+    private $authenticatedUserContextCachedObject;
 
     /**
      * CDEDisloController constructor.
@@ -78,25 +77,25 @@ class CDEDisloController extends CDEController {
      * @throws AuthenticationRequiredException
      */
     protected function getAndExtendAuthToken() {
-        if (!isset($this->authToken)) {
-            $this->authToken = $this->getAuthenticationProcessor()->extendToken();
-        }
-
-        return $this->authToken;
+        return $this->getAuthenticationProcessor()->extendToken();
     }
 
     /**
      * @return UserContext
+     *
+     * @throws InvalidTokenException
+     * @throws AuthenticationRequiredException
      */
     protected function getUserContext() {
-        if (!isset($this->authenticatedUserContext)) {
-            $this->authenticatedUserContext = new UserContext(
-                $this->getClient(),
-                $this->getAuthenticationProcessor()->getAuthenticatedUser()
-            );
+        if (!isset($this->authenticatedUserContextCachedObject)) {
+            $this->authenticatedUserContextCachedObject = new CachedObject($this->createNewUserContext());
         }
 
-        return $this->authenticatedUserContext;
+        if (empty($this->authenticatedUserContextCachedObject->getObject())) {
+            throw new AuthenticationRequiredException();
+        }
+
+        return $this->authenticatedUserContextCachedObject->getObject();
     }
 
     /**
@@ -105,9 +104,24 @@ class CDEDisloController extends CDEController {
      * @return $this
      */
     protected function setUserContext(UserContext $userContext) {
-        $this->authenticatedUserContext = $userContext;
+        $this->authenticatedUserContextCachedObject = new CachedObject($userContext);
 
         return $this;
+    }
+
+    /**
+     * @return UserContext|null
+     */
+    protected function createNewUserContext() {
+        try {
+            return new UserContext(
+                $this->getClient(),
+                $this->getAuthenticationProcessor()->getAuthenticatedUser()
+            );
+        } catch (AuthenticationRequiredException $e) {
+        } catch (InvalidTokenException $e) {}
+
+        return null;
     }
 
     /**

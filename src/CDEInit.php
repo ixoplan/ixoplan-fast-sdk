@@ -9,12 +9,14 @@ class CDEInit extends \Ixolit\CDE\CDEInit {
 		// TODO: get rid of this really ugly global!
 		global $cdeToolbar;
 
+        $appDir = defined('APP_DIR') ? APP_DIR : '/';
+
 		$cdeToolbar = new CDEToolbar(
 			CDE::getRequestAPI(),
 			CDE::getResponseAPI(),
 			CDE::getFilesystemAPI(),
 			[
-				'/tests'
+				$appDir . 'tests'
 			]
 		);
 
