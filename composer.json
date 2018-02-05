@@ -1,6 +1,6 @@
 {
 	"name": "ixolit/dislo-cde-sdk",
-	"license": "proprietary",
+	"license": "MIT",
 	"type": "library",
 	"description": "Dislo SDK to be used within the CDE.",
 	"require": {
