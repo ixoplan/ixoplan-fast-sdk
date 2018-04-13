@@ -19,6 +19,8 @@ use Ixolit\Dislo\WorkingObjects\User;
  * Class CDEDisloController
  *
  * @package Ixolit\Dislo\CDE\Controller
+ *
+ * @deprecated
  */
 class CDEDisloController extends CDEController {
 

@@ -11,6 +11,13 @@ use Ixolit\Dislo\Response\MiscGetRedirectorConfigurationResponse;
 use Ixolit\Dislo\Response\PackageGetResponse;
 use Ixolit\Dislo\Response\PackagesListResponse;
 
+/**
+ * Class CDEDisloClient
+ *
+ * @package Ixolit\Dislo\CDE
+ *
+ * @deprecated
+ */
 class CDEDisloClient extends Client {
 
 	/**

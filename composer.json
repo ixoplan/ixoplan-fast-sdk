@@ -10,6 +10,7 @@
 	},
 	"autoload": {
 		"psr-4": {
+			"Ixolit\\CDE\\Context\\Custom": "./src/Context/Custom",
 			"Ixolit\\Dislo\\CDE\\": "./src"
 		}
 	},

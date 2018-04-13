@@ -9,6 +9,13 @@ use Ixolit\Dislo\CDE\CDEInit;
 use Ixolit\Dislo\Redirector\Base\RedirectorRequestInterface;
 use Ixolit\Dislo\Redirector\Base\RedirectorResultInterface;
 
+/**
+ * Class Page
+ *
+ * @package Ixolit\Dislo\CDE\Context
+ *
+ * @deprecated use a custom page object instead
+ */
 class Page extends CDEPage {
 
 	/** @var CDEDisloClient */
