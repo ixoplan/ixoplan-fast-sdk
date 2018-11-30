@@ -42,6 +42,12 @@ class CDEToolbar {
 		if (\function_exists('previewInfo') && $previewInfo = previewInfo()) {
 			$this->previewInfo = $previewInfo;
 		}
+		elseif (\function_exists('isPreview') && isPreview()) {
+			$this->previewInfo = (object) [
+				'type' => 'session',
+				'timestamp' => \time() * 1000,
+			];
+		}
 
 		$this->request = $request;
 		$this->response = $response;
