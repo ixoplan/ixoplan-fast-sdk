@@ -2,7 +2,6 @@
 
 namespace Ixolit\Dislo\CDE;
 
-use Ixolit\Dislo\CDE\Context\Page;
 use Ixolit\Dislo\CDE\Request\CDERequestClient;
 use Ixolit\Dislo\Client;
 use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
@@ -14,9 +13,12 @@ use Ixolit\Dislo\Response\PackageGetResponse;
  *
  * @package Ixolit\Dislo\CDE
  *
- * @deprecated this client is not in use anymore
+ * @deprecated use default dislo client with CDERequestClient
  */
 class CDEDisloClient extends Client {
+
+	/** @var CDERequestClient */
+	private $cdeRequestClient;
 
 	/**
 	 * Initialize the client. If no RequestClient is passed, this class attempts to use the CDE-internal API method.
@@ -26,19 +28,33 @@ class CDEDisloClient extends Client {
 	 */
 	public function __construct(RequestClient $requestClient = null, $forceTokenMode = true) {
 		if (!isset($requestClient) && \function_exists('\\apiCall')) {
-			$requestClient = new CDERequestClient(Page::kvsAPI(), false);
+			$requestClient = new CDERequestClient();
+		}
+		if ($requestClient instanceof CDERequestClient) {
+			$this->cdeRequestClient = $requestClient;
 		}
 		parent::__construct($requestClient, $forceTokenMode);
 	}
 
-    /**
-     * @param bool $cached
-     *
-     * @return CDERequestClient
-     */
-	private function createRequestClient($cached) {
-	    return new CDERequestClient(Page::kvsAPI(), $cached);
-    }
+	/**
+	 * executing callback with temporarily switched cache mode
+	 *
+	 * @param $call
+	 * @param $cached
+	 * @return mixed
+	 */
+	private function exec($call, $cached) {
+		if ($this->cdeRequestClient instanceof CDERequestClient) {
+			$useKvs = $this->cdeRequestClient->getUseKvs();
+			$this->cdeRequestClient->setUseKvs($cached);
+			$result = $call();
+			$this->cdeRequestClient->setUseKvs($useKvs);
+		}
+		else {
+			$result = $call();
+		}
+		return $result;
+	}
 
 	/**
 	 * @param string $packageIdentifier
@@ -49,9 +65,12 @@ class CDEDisloClient extends Client {
 	 * @throws ObjectNotFoundException
 	 */
 	public function packageGet($packageIdentifier, $cached = true) {
-	    $this->setRequestClient($this->createRequestClient($cached));
-
-	    return parent::packageGet($packageIdentifier);
+		return $this->exec(
+			function () use ($packageIdentifier) {
+				return parent::packageGet($packageIdentifier);
+			},
+			$cached
+		);
 	}
 
 	/**
@@ -64,9 +83,12 @@ class CDEDisloClient extends Client {
 	 * @return \Ixolit\Dislo\Response\PackagesListResponse
 	 */
 	public function packagesList($serviceIdentifier = null, $cached = false) {
-        $this->setRequestClient($this->createRequestClient($cached));
-
-        return parent::packagesList($serviceIdentifier);
+		return $this->exec(
+			function () use ($serviceIdentifier) {
+				return parent::packagesList($serviceIdentifier);
+			},
+			$cached
+		);
 	}
 
 	/**
@@ -76,8 +98,11 @@ class CDEDisloClient extends Client {
 	 * @return \Ixolit\Dislo\Response\MiscGetRedirectorConfigurationResponse
 	 */
 	public function miscGetRedirectorConfiguration($cached = true) {
-	    $this->setRequestClient($this->createRequestClient($cached));
-
-	    return parent::miscGetRedirectorConfiguration();
+		return $this->exec(
+			function () {
+				return parent::miscGetRedirectorConfiguration();
+			},
+			$cached
+		);
 	}
 }

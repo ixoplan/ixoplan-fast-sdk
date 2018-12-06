@@ -11,6 +11,7 @@ use Ixolit\Dislo\Request\RequestClient;
 
 /**
  * This client uses the CDE-internal API to talk to Dislo.
+ * It looks for cached data in the CDE key value store filled by Dislo previously.
  */
 class CDERequestClient implements RequestClient {
 
@@ -33,12 +34,12 @@ class CDERequestClient implements RequestClient {
      *
      * @throws CDEFeatureNotSupportedException
      */
-    public function __construct(KVSAPI $kvsApi = null, $useKvs  = true) {
+    public function __construct(KVSAPI $kvsApi = null, $useKvs = true) {
         if (!\function_exists('\\apiCall')) {
             throw new CDEFeatureNotSupportedException('apiCall');
         }
 
-        $this->kvsApi = $kvsApi ? $kvsApi : Page::kvsAPI();
+        $this->kvsApi = $kvsApi ?: Page::kvsAPI();
         $this->useKvs = $useKvs;
     }
 
@@ -47,6 +48,13 @@ class CDERequestClient implements RequestClient {
      */
     private function getKvsApi() {
         return $this->kvsApi;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getUseKvs() {
+        return $this->useKvs;
     }
 
     /**
@@ -61,13 +69,6 @@ class CDERequestClient implements RequestClient {
     }
 
     /**
-     * @return bool
-     */
-    private function usesKvs() {
-        return $this->useKvs;
-    }
-
-    /**
 	 * @param string $uri
 	 * @param array  $params
 	 *
@@ -76,7 +77,7 @@ class CDERequestClient implements RequestClient {
 	 * @throws InvalidResponseData
 	 */
 	public function request($uri, array $params) {
-	    if ($this->usesKvs()) {
+	    if ($this->getUseKvs()) {
 	        $response = $this->getKvsCallResponse($uri, $params);
 
 	        if (\is_array($response)) {
