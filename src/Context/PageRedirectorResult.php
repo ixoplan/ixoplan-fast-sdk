@@ -2,6 +2,7 @@
 
 namespace Ixolit\Dislo\CDE\Context;
 
+use Ixolit\CDE\Context\Page;
 use Ixolit\Dislo\Redirector\Base\Cookie;
 use Ixolit\Dislo\Redirector\Base\Header;
 use Ixolit\Dislo\Redirector\Base\RedirectorResultInterface;
