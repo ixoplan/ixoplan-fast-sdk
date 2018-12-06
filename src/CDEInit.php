@@ -2,6 +2,9 @@
 
 namespace Ixolit\Dislo\CDE;
 
+/**
+ * @deprecated use CDEToolbarAPI
+ */
 class CDEInit extends \Ixolit\CDE\CDEInit {
 
 	public static function execute() {
