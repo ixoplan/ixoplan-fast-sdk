@@ -14,7 +14,7 @@ use Ixolit\Dislo\Redirector\Base\RedirectorResultInterface;
  *
  * @package Ixolit\Dislo\CDE\Context
  *
- * @deprecated use a custom page object instead
+ * @deprecated use PageRedirector and similar helpers
  */
 class Page extends CDEPage {
 
