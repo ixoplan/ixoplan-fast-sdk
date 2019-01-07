@@ -4,6 +4,7 @@ namespace Ixolit\Dislo\CDE\Validator;
 
 use Ixolit\CDE\Validator\FormValidator;
 use Ixolit\Dislo\CDE\CDEDisloClient;
+use Ixolit\Dislo\Client;
 use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
 
 class DuplicateUserValidator implements FormValidator {
@@ -12,12 +13,26 @@ class DuplicateUserValidator implements FormValidator {
 	 */
 	private $exceptUserId;
 
-	/**
-	 * @param int|null $exceptUserId allow this user to have the same e-mail address.
-	 */
-	public function __construct($exceptUserId = null) {
+    /**
+     * @var Client|CDEDisloClient
+     */
+	private $disloClient;
+
+    /**
+     * @param int|null    $exceptUserId allow this user to have the same e-mail address.
+     * @param Client|null $disloClient
+     */
+	public function __construct($exceptUserId = null, Client $disloClient = null) {
 		$this->exceptUserId = $exceptUserId;
+		$this->disloClient = $disloClient ?: new CDEDisloClient();
 	}
+
+    /**
+     * @return CDEDisloClient
+     */
+    protected function getDisloClient() {
+        return $this->disloClient;
+    }
 
 	/**
 	 * {@inheritdoc}
@@ -30,12 +45,11 @@ class DuplicateUserValidator implements FormValidator {
 	 * {@inheritdoc}
 	 */
 	public function isValid($value) {
-		$client = new CDEDisloClient();
 		if (!$value) {
 			return true;
 		}
 		try {
-			$userId = $client->userFind($value)->getUser()->getUserId();
+			$userId = $this->disloClient->userFind($value)->getUser()->getUserId();
 			if ($this->exceptUserId !== null && $userId == $this->exceptUserId) {
 				return true;
 			}

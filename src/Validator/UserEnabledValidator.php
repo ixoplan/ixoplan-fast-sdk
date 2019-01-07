@@ -4,11 +4,33 @@ namespace Ixolit\Dislo\CDE\Validator;
 
 use Ixolit\CDE\Validator\FormValidator;
 use Ixolit\Dislo\CDE\CDEDisloClient;
+use Ixolit\Dislo\Client;
 use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
 
 class UserEnabledValidator implements FormValidator {
 
-	/**
+    /**
+     * @var Client|CDEDisloClient
+     */
+    private $disloClient;
+
+    /**
+     * UserEnabledValidator constructor.
+     *
+     * @param Client|null $disloClient
+     */
+    public function __construct(Client $disloClient = null) {
+        $this->disloClient = $disloClient ?: new CDEDisloClient();
+    }
+
+    /**
+     * @return CDEDisloClient|Client
+     */
+    protected function getDisloClient() {
+        return $this->disloClient;
+    }
+
+    /**
 	 * {@inheritdoc}
 	 */
 	public function getKey() {
@@ -22,9 +44,8 @@ class UserEnabledValidator implements FormValidator {
 		if (!$value) {
 			return false;
 		}
-		$client = new CDEDisloClient();
 		try {
-			return !$client->userFind($value)->getUser()->isLoginDisabled();
+			return !$this->getDisloClient()->userFind($value)->getUser()->isLoginDisabled();
 		} catch (ObjectNotFoundException $e) {
 			return false;
 		}
