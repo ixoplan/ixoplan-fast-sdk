@@ -2,10 +2,10 @@
 
 namespace Ixolit\Dislo\CDE\Request;
 
+use Ixolit\CDE\Context\Page;
 use Ixolit\CDE\Exceptions\CDEFeatureNotSupportedException;
 use Ixolit\CDE\Exceptions\KVSKeyNotFoundException;
 use Ixolit\CDE\Interfaces\KVSAPI;
-use Ixolit\Dislo\CDE\Context\Page;
 use Ixolit\Dislo\Request\InvalidResponseData;
 use Ixolit\Dislo\Request\RequestClient;
 
