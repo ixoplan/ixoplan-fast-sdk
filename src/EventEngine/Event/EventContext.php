@@ -142,7 +142,16 @@ class EventContext {
      * @return Subscription|null
      */
     public function getSubscription() {
-        return $this->getFirstWorkingObjectByType(AbstractWorkingObject::SUBSCRIPTION);
+        $subscription = $this->getFirstWorkingObjectByType(AbstractWorkingObject::SUBSCRIPTION);
+
+        if (!($subscription instanceof Subscription)) {
+            $subscriptionCollection = $this->getSubscriptionCollection();
+            if ($subscriptionCollection instanceof SubscriptionCollection) {
+                $subscription = $subscriptionCollection->current();
+            }
+        }
+
+        return $subscription;
     }
 
     /**
