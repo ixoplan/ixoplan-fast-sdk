@@ -35,6 +35,7 @@ use Ixolit\Dislo\CDE\EventEngine\Event\User\UserMetaDataChanged;
 use Ixolit\Dislo\CDE\EventEngine\Event\User\UserPasswordChanged;
 use Ixolit\Dislo\CDE\EventEngine\Event\User\UserReportReceiver;
 use Ixolit\Dislo\CDE\EventEngine\Event\User\UserValidated;
+use Ixolit\Dislo\CDE\EventEngine\Thread;
 
 /**
  * Class EventFactory
@@ -57,4 +58,26 @@ class EventFactory {
         return new $eventClass();
     }
 
+    /**
+     * @param array $data
+     * @return AbstractEvent
+     * @throws \Exception
+     */
+    public static function createFromData(array $data) {
+
+        if (isset($data['event']) && isset($data['thread']) && is_array($data['thread'])) {
+
+            $thread = Thread::fromArray($data['thread']);
+            $workingObjects = isset($data['workingObjects']) && is_array($data['workingObjects']) ? $data['workingObjects'] : [];
+
+            $eventContext = new EventContext($thread, $workingObjects);
+
+            $event = self::createByName($data['event']);
+            $event->setContext($eventContext);
+
+            return $event;
+        }
+
+        throw new \Exception("Given data do not contain an event!");
+    }
 }
