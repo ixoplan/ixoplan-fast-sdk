@@ -43,7 +43,7 @@ use Ixolit\Dislo\CDE\EventEngine\Event\User\UserValidated;
 class EventFactory {
 
     /**
-     * @param $string name
+     * @param string $name
      * @return AbstractEvent
      */
     public static function createByName($name){

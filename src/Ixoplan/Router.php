@@ -33,7 +33,7 @@ class Router {
                 return $controller->getAvailableActions($request->getParameters()->workingObjects, $event);
             },
             
-             '/event-engine/executeAction' => function(Request $request) {
+            '/event-engine/executeAction' => function(Request $request) {
                 $controller = new EventEngineController($request);
 
                 $action = $request->getParameters()->action;
