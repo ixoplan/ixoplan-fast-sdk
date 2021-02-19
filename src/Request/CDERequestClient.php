@@ -25,7 +25,7 @@ class CDERequestClient implements RequestClient, RequestClientWithDevModeSupport
     /** @var bool */
     private $useKvs;
 
-	/**
+    /**
      * Enable/Disable the developer mode, which when enables might return different plans/billing methods etc. depending on the backend configuration
      * @var bool
      */
@@ -72,6 +72,15 @@ class CDERequestClient implements RequestClient, RequestClientWithDevModeSupport
     public function setUseKvs($useKvs) {
         $this->useKvs = $useKvs;
 
+        return $this;
+    }
+
+    /**
+     * @param bool $devMode
+     * @return $this
+     */
+    public function setDevMode($devMode) {
+        $this->devMode = (bool) $devMode;
         return $this;
     }
 
@@ -144,15 +153,6 @@ class CDERequestClient implements RequestClient, RequestClientWithDevModeSupport
      */
     private function getMiscRedirectorConfigurationFromKvs() {
         return \json_decode(\json_encode($this->getKvsApi()->get('redirectorData')), true);
-    }
-
-    /**
-     * @param bool $devMode
-     * @return $this
-     */
-    public function setDevMode($devMode) {
-        $this->devMode = (bool) $devMode;
-        return $this;
     }
 
 }
