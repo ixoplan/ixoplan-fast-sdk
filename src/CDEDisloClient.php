@@ -60,7 +60,7 @@ class CDEDisloClient extends Client {
 		$serviceIdentifier = null,
 		$cached = false
 	) {
-		if (!$cached) {
+		if (!$cached || $this->getDevMode()) {
 			return parent::packagesList($serviceIdentifier);
 		} else {
 			try {
@@ -83,7 +83,7 @@ class CDEDisloClient extends Client {
 	 */
 	public function miscGetRedirectorConfiguration($cached = true) {
 
-		if (!$cached) {
+		if (!$cached || $this->getDevMode()) {
 			return parent::miscGetRedirectorConfiguration();
 		}
 		else {
