@@ -6,6 +6,7 @@ use Ixolit\CDE\Context\Page;
 use Ixolit\CDE\Exceptions\CDEFeatureNotSupportedException;
 use Ixolit\CDE\Exceptions\KVSKeyNotFoundException;
 use Ixolit\CDE\Interfaces\KVSAPI;
+use Ixolit\Dislo\Client;
 use Ixolit\Dislo\Request\InvalidResponseData;
 use Ixolit\Dislo\Request\RequestClient;
 use Ixolit\Dislo\Request\RequestClientWithDevModeSupport;
@@ -15,9 +16,6 @@ use Ixolit\Dislo\Request\RequestClientWithDevModeSupport;
  * It looks for cached data in the CDE key value store filled by Dislo previously.
  */
 class CDERequestClient implements RequestClient, RequestClientWithDevModeSupport {
-
-    const API_URI_PACKAGE_LIST = '/frontend/subscription/getPackages';
-    const API_URI_MISC_REDIRECTOR_CONFIGURATION = '/frontend/misc/getRedirectorConfiguration';
 
     /** @var KVSAPI */
     private $kvsApi;
@@ -121,11 +119,11 @@ class CDERequestClient implements RequestClient, RequestClientWithDevModeSupport
 	    //decide method call using
 	    try {
 	        switch ($uri) {
-                case self::API_URI_PACKAGE_LIST:
+                case Client::API_URI_PACKAGE_LIST:
                     $response = $this->getPackageListFromKvs();
 
                     break;
-                case self::API_URI_MISC_REDIRECTOR_CONFIGURATION:
+                case Client::API_URI_REDIRECTOR_GET_CONFIGURATION:
                     $response = $this->getMiscRedirectorConfigurationFromKvs();
 
                     break;
