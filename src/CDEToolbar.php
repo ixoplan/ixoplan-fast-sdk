@@ -33,12 +33,6 @@ class CDEToolbar {
 		FilesystemAPI $filesystemAPI,
 		$unitTestDirectories = []
 	) {
-
-	    $appDir = defined('APP_DIR') ? APP_DIR  : '/';
-
-		$unitTestDirectories[] = $appDir . 'vendor/ixolit/dislo-cde-sdk/tests/';
-		$unitTestDirectories[] = $appDir . 'vendor/ixolit/dislo-sdk/tests/';
-
 		if (\function_exists('previewInfo') && $previewInfo = previewInfo()) {
 			$this->previewInfo = $previewInfo;
 		}
