@@ -33,9 +33,6 @@ class CDEToolbar {
 		FilesystemAPI $filesystemAPI,
 		$unitTestDirectories = []
 	) {
-
-	    $appDir = defined('APP_DIR') ? APP_DIR  : '/';
-
 		if (\function_exists('previewInfo') && $previewInfo = previewInfo()) {
 			$this->previewInfo = $previewInfo;
 		}
