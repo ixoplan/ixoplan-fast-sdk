@@ -73,19 +73,21 @@ class CDEDisloClient extends Client {
 		);
 	}
 
-	/**
-	 * Retrieve a list of all packages registered in the system. This version uses the CDE key-value store to make
-	 * package list retrieval faster.
-	 *
-	 * @param null|string $serviceIdentifier
-	 * @param bool        $cached Use key-value store cached packages list instead of fetching it from the API.
-	 *
-	 * @return \Ixolit\Dislo\Response\PackagesListResponse
-	 */
-	public function packagesList($serviceIdentifier = null, $cached = false) {
+    /**
+     * Retrieve a list of all packages registered in the system. This version uses the CDE key-value store to make
+     * package list retrieval faster.
+     *
+     * @param null|string $serviceIdentifier
+     * @param bool        $cached Use key-value store cached packages list instead of fetching it from the API.
+     * @param string[]    $packageIdentifiers
+     * @param bool        $onlyAvailable
+     *
+     * @return \Ixolit\Dislo\Response\PackagesListResponse
+     */
+	public function packagesList($serviceIdentifier = null, $cached = false, array $packageIdentifiers = [], $onlyAvailable = false) {
 		return $this->exec(
-			function () use ($serviceIdentifier) {
-				return parent::packagesList($serviceIdentifier);
+			function () use ($serviceIdentifier, $packageIdentifiers, $onlyAvailable) {
+				return parent::packagesList($serviceIdentifier, $packageIdentifiers, $onlyAvailable);
 			},
 			$cached
 		);
