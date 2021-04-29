@@ -7,7 +7,7 @@ use Ixolit\Dislo\Request\RequestClient;
 use Ixolit\Dislo\Request\RequestClientWithDevModeSupport;
 
 /**
- * This client uses the CDE-internal API to talk to Dislo.
+ * This client uses the FAST-internal API to talk to Ixoplan.
  */
 class CDERequestClient implements RequestClient, RequestClientWithDevModeSupport {
 

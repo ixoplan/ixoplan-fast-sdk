@@ -1,12 +1,12 @@
 {
-	"name": "ixolit/dislo-cde-sdk",
+	"name": "ixoplan/ixoplan-fast-sdk",
 	"license": "MIT",
 	"type": "library",
-	"description": "Dislo SDK to be used within the CDE.",
+	"description": "Ixoplan SDK to be used within FAST.",
 	"require": {
-		"ixolit/cde-sdk": "^1.0.30",
-		"ixolit/dislo-sdk": "^1.0.47",
-		"ixolit/dislo-cde-unittest": "^1.0.0"
+		"ixoplan/fast-sdk": "^1.0.43",
+		"ixoplan/ixoplan-sdk": "^1.0.48",
+		"ixoplan/ixoplan-fast-unittest": "^1.0.0"
 	},
 	"autoload": {
 		"psr-4": {
