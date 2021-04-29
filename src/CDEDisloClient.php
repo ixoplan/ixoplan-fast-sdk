@@ -152,7 +152,7 @@ class CDEDisloClient extends Client {
     }
 
 	/**
-	 * Retrieve Dislo's redirector configuration. This version uses the CDE key-value store to make retrieval faster.
+	 * Retrieve Ixoplan's redirector configuration. This version uses the FAST key-value store to make retrieval faster.
 	 *
 	 * @param bool $cached
 	 * @return \Ixolit\Dislo\Response\MiscGetRedirectorConfigurationResponse

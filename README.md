@@ -1,24 +1,24 @@
-# dislo-cde-sdk
-PHP SDK for the Dislo API to be used within the CDE
+# ixoplan-cde-sdk
+PHP SDK for the Ixoplan API to be used within FAST
 
 ## Installation
 
-Simply add `ixolit/dislo-cde-sdk` to your composer.json, e.g:
+Simply add `ixoplan/ixoplan-fast-sdk` to your composer.json, e.g:
 
 ```json
 {
     "name": "myvendor/myproject",
-    "description": "Using dislo-cde-sdk",
+    "description": "Using ixoplan-fast-sdk",
     "require": {
-        "ixolit/dislo-cde-sdk": "*"
+        "ixoplan/ixoplan-fast-sdk": "*"
     }
 }
 ```
 
 ## Usage
 
-The `\Ixolit\Dislo\Client` is designed for different transport layers. It needs a RequestClient interface to actually communicate with Dislo.
-This SDK provides `\Ixolit\Dislo\CDE\CDEDisloClient`, an extension that defaults to an implementation based on CDE's internal methods.
+The `\Ixolit\Dislo\Client` is designed for different transport layers. It needs a RequestClient interface to actually communicate with Ixoplan.
+This SDK provides `\Ixolit\Dislo\CDE\CDEDisloClient`, an extension that defaults to an implementation based on FAST's internal methods.
 
 ```php
 use Ixolit\Dislo\CDE\CDEDisloClient;
@@ -26,4 +26,4 @@ use Ixolit\Dislo\CDE\CDEDisloClient;
 $apiClient = new CDEDisloClient();
 ```
 
-For available API calls please refer to the [dislo-sdk](https://github.com/Ixolit/dislo-sdk).
+For available API calls please refer to the [ixoplan-sdk](https://github.com/ixoplan/ixoplan-sdk).
