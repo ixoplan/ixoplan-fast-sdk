@@ -13,7 +13,7 @@ use Ixolit\Dislo\Response\PackageGetResponse;
  *
  * @package Ixolit\Dislo\CDE
  *
- * @deprecated use default dislo client with CDERequestClient
+ * @deprecated use default Ixoplan client with CDERequestClient
  */
 class CDEDisloClient extends Client {
 
@@ -21,9 +21,9 @@ class CDEDisloClient extends Client {
 	private $cdeRequestClient;
 
 	/**
-	 * Initialize the client. If no RequestClient is passed, this class attempts to use the CDE-internal API method.
+	 * Initialize the client. If no RequestClient is passed, this class attempts to use the FAST-internal API method.
 	 *
-	 * @param RequestClient|null $requestClient  Default to internal API method when running in the CDE.
+	 * @param RequestClient|null $requestClient  Default to internal API method when running in the FAST.
 	 * @param bool               $forceTokenMode Force using tokens. Does not allow passing a user Id.
 	 */
 	public function __construct(RequestClient $requestClient = null, $forceTokenMode = true) {
@@ -94,7 +94,7 @@ class CDEDisloClient extends Client {
 	}
 
 	/**
-	 * Retrieve Dislo's redirector configuration. This version uses the CDE key-value store to make retrieval faster.
+	 * Retrieve Ixoplan's redirector configuration. This version uses the FAST key-value store to make retrieval faster.
 	 *
 	 * @param bool $cached
 	 * @return \Ixolit\Dislo\Response\MiscGetRedirectorConfigurationResponse

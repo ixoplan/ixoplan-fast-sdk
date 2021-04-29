@@ -12,8 +12,8 @@ use Ixolit\Dislo\Request\RequestClient;
 use Ixolit\Dislo\Request\RequestClientWithDevModeSupport;
 
 /**
- * This client uses the CDE-internal API to talk to Dislo.
- * It looks for cached data in the CDE key value store filled by Dislo previously.
+ * This client uses the FAST-internal API to talk to Ixoplan.
+ * It looks for cached data in the CDE key value store filled by Ixoplan previously.
  */
 class CDERequestClient implements RequestClient, RequestClientWithDevModeSupport
 {
